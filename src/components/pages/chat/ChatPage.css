@@ -1,0 +1,24 @@
+#chat_page {
+    background-color: var(--st-bg);
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+
+#channels_section {
+    display: flex;
+    align-items: stretch;
+    width: 20%;
+    margin: 5px;
+    background-color: var(--st-primary);
+}
+
+#main_section {
+    display: flex;
+    align-items: stretch;
+    width: 70%;
+    margin: 5px;
+    background-color: var(--st-bg);
+    border: 1px solid var(--st-text-color);
+    border-radius: 12px;
+}

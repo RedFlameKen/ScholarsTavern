@@ -1,0 +1,12 @@
+:root {
+    --st-bg:                #EBCB8B;
+    --st-bg-light:          #DADADA;
+    --st-primary:           #C8794C;
+    --st-secondary:         #A95A30;
+    --st-bg-extra:          #987427;
+    --st-text-color:        #4C4C4C;
+    --st-text-color-dark:   #4B3C28;
+    --st-text-color-darker: #3C2A1A;
+    --st-yellow:            #FFDE00;
+    --st-green:             #3F8D4C;
+}
