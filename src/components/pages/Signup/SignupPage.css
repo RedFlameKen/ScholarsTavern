@@ -1,3 +1,5 @@
+/* SignupPage.css */
+
 :root {
     --parchment-color: #dbc6b0;
     --fantasy-text-color: #0d0c0c;
@@ -7,11 +9,11 @@
     --standard-text-font: Arial, Helvetica, sans-serif;
 }
 
-#login_page,
 #signup_page {
     width: 100%;
     min-height: 100vh;
     background-color: var(--st-bg);
+    /* Once you have your asset, uncomment below and update the path: */
     /* background-image: url("../../../assets/background.jpg"); */
     background-size: cover;
     background-position: center;
@@ -38,7 +40,6 @@
     flex-direction: column;
 }
 
-/* Updated to ensure identical heading layouts */
 .form-title {
     font-family: "Cinzel Decorative", cursive, serif;
     color: var(--fantasy-text-color);
@@ -46,8 +47,6 @@
     margin-top: 0;
     margin-bottom: 25px;
     font-weight: 700;
-    text-align: left;
-    /* Aligns with "Log in" layout from Screenshot 2026-06-17 094034.png */
 }
 
 .input-group {
@@ -83,7 +82,6 @@
     outline: 2px solid var(--st-bg-extra);
 }
 
-/* Styled button with proper margin/width matching the screenshot */
 .parchment-submit-btn {
     background-color: var(--button-color);
     color: #333333;
@@ -92,14 +90,11 @@
     font-weight: 500;
     padding: 14px 20px;
     border: none;
-    border-radius: 20px;
-    /* Kept highly rounded to match the screenshot's pill shape */
+    border-radius: 8px;
     cursor: pointer;
-    margin: 15px auto 30px auto;
-    width: 80%;
-    /* Shrinks it in slightly to mirror the screenshot button layout */
-    display: block;
-    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    width: 100%;
     transition: background-color 0.2s ease;
 }
 
@@ -107,18 +102,10 @@
     background-color: #e0e0e0;
 }
 
-/* Handles layout for the lower links cleanly */
 .form-footer {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
     width: 100%;
     font-family: var(--standard-text-font);
-}
-
-/* Fallback class helper for the single link on the Signup Page footer */
-.form-footer.center-footer {
-    justify-content: center;
 }
 
 .footer-link {
