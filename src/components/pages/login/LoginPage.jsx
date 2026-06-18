@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom"
 import "../../../styles/ColorPalette.css"
 import "./LoginPage.css"
 import NavBarTop from "../../nav_bar_top/NavBarTop";
 import RoundedButton from "../../rounded_button/RoundedButton";
 
 function LoginPage(){
+    const navigate = useNavigate();
+
     return (
         <div id="login_page">
             <NavBarTop buttons={[
@@ -16,7 +19,7 @@ function LoginPage(){
                 ),
                 (<RoundedButton 
                     label={"Login"} 
-                    onClick={_ => {}}
+                    onClick={_ => navigate("/home")}
                     />
                 ),
             ]} />

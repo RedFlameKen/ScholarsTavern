@@ -2,6 +2,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import './App.css';
 import ChatPage from './components/pages/chat/ChatPage';
 import CallPage from './components/pages/call/CallPage';
+import HomePage from './components/pages/home/HomePage';
+import AccountProfilePage from './components/pages/account_profile/AccountProfilePage';
 import LoginPage from './components/pages/login/LoginPage';
 
 function App() {
@@ -9,8 +11,10 @@ function App() {
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<LoginPage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/chat" element={<ChatPage />} />
             <Route path="/call" element={<CallPage />} />
+            <Route path="/account-profile" element={<AccountProfilePage />} />
             <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>

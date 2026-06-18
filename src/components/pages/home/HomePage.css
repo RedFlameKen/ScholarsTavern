@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Redressed&display=swap');
+
+#home_page {
+    min-height: 100vh;
+    display: flex;
+    background-color: #E8CBAE;
+}
+
+#home_main {
+    flex: 1;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+#home_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+#home_header h1 {
+    margin: 0;
+    color: var(--st-text-color-darker);
+    font-size: 3.5rem;
+    font-family: 'Redressed', cursive;
+}
+
+#home_header p {
+    margin: 0.5rem 0 0;
+    color: var(--st-text-color);
+    max-width: 560px;
+}
+
+#group_cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, max-content));
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.create_card {
+    width: 280px;
+    height: 280px;
+    background: #E8CBAE;
+    border: 2px solid rgba(76,76,76,0.22);
+    border-radius: 28px;
+    padding: 2rem;
+    color: var(--st-text-color-darker);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 1.35rem;
+    box-shadow: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.create_card:hover,
+.create_card:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(76,76,76,0.35);
+    outline: none;
+}
+
+.create_card_icon {
+    width: 86px;
+    height: 86px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: transparent;
+    margin: 0 auto;
+}
+
+.create_card_icon img {
+    width: 60px;
+    height: 60px;
+}
+
+.create_card_text {
+    font-size: 1.4rem;
+    font-weight: 800;
+}

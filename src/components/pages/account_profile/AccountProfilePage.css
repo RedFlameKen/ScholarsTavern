@@ -1,0 +1,210 @@
+#account_profile_page {
+    min-height: 100vh;
+    display: flex;
+}
+
+#account_content {
+    flex: 1;
+    background-color: #E8CBAE;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+#account_header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    background: #98856f;
+    padding: 1.5rem;
+    border-radius: 28px;
+    color: white;
+}
+
+#account_avatar {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    background: #ddd;
+    border: 3px solid #C8794C;
+}
+
+#account_name {
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+#account_main {
+    display: grid;
+    grid-template-columns: 1.4fr minmax(220px, max-content);
+    gap: 1.5rem;
+}
+
+#account_about_card {
+    background: #E8CBAE;
+    border: 1px solid rgba(76,76,76,0.25);
+    border-radius: 20px;
+    padding: 1.5rem;
+    min-width: 0;
+}
+
+#account_about_header {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#account_section_title {
+    font-weight: 700;
+    color: #4C4C4C;
+    font-size: 40px;
+    margin: 0;
+}
+
+#edit_about_btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#edit_about_btn:hover {
+    opacity: 0.7;
+    transform: translateY(-3px);
+}
+
+#edit_about_btn img {
+    width: 32px;
+    height: 32px;
+    opacity: 0.6;
+}
+
+#account_about_box {
+    width: 100%;
+    min-height: 160px;
+    border: 1px solid rgba(76,76,76,0.4);
+    border-radius: 16px;
+    background: rgba(255,255,255,0.85);
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+#account_about_box p {
+    margin: 0;
+    color: #4C4C4C;
+    line-height: 1.6;
+    font-size: 1.4rem;
+}
+
+#account_actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background: #E8CBAE;
+    border: 1px solid rgba(76,76,76,0.25);
+    border-radius: 20px;
+    padding: 1.5rem;
+    max-width: 300px;
+}
+
+#account_actions_title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #4C4C4C;
+    margin: 0 0 0.75rem 0;
+}
+
+.account_action_text {
+    margin: 0;
+    color: #4C4C4C;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+#account_logout_text {
+    margin: 0;
+    color: #4C4C4C;
+    font-size: 1.1rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    font-weight: 700;
+}
+
+#account_logout_text:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+#edit_modal_overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: grid;
+    place-items: center;
+    padding: 1.5rem;
+    z-index: 1000;
+}
+
+#edit_modal_content {
+    background: #E8CBAE;
+    border-radius: 24px;
+    padding: 2rem;
+    width: min(520px, 100%);
+    max-width: 520px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+#edit_modal_content h2 {
+    margin: 0 0 1.5rem 0;
+    color: #4C4C4C;
+    font-size: 1.5rem;
+}
+
+#edit_about_textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    border: 1px solid rgba(76,76,76,0.4);
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    color: #4C4C4C;
+    resize: vertical;
+    margin-bottom: 1.5rem;
+    box-sizing: border-box;
+}
+
+#edit_about_textarea:focus {
+    outline: none;
+    border-color: #C8794C;
+}
+
+#edit_modal_save_btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #C8794C;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+#edit_modal_save_btn:hover {
+    background: #B5673D;
+}
