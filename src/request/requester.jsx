@@ -15,6 +15,14 @@ class ResponseData {
     }
 }
 
+/** 
+    * @param {Object} options
+    * @param {string} options.domain
+    * @param {string} options.endpoint
+    * @param {Record<string, any>} options.request_params
+    * @param {(_: ResponseData) => void} options.on_finish
+    * @param {(_: any) => void} options.on_error
+*/
 export function GET({
     domain=DEFAULT_SERVER_DOMAIN,
     endpoint="",
@@ -28,17 +36,16 @@ export function GET({
             method: "GET",
             credentials: "include",
         }).then(async (response) => {
-            /** @type {Map} */
             console.log("sent get request!")
             let body = await response.json()
             if (!body){
                 on_finish(new ResponseData())
                 return
             }
-            let status = body.get("status")
-            let success = body.get("success")
-            let message = body.get("message")
-            let data = body.get("data")
+            let status = response.status
+            let success = body.success
+            let message = body.message
+            let data = body.data
             on_finish(new ResponseData(status, success, message, data))
         }).catch((reason) => {
             console.log(reason)
@@ -46,37 +53,62 @@ export function GET({
         })
 }
 
+/** 
+    * @param {Object} options
+    * @param {string} options.domain
+    * @param {string} options.endpoint
+    * @param {string | Map} options.body
+    * @param {Record<string, any>} options.request_params
+    * @param {string} options.content_type
+    * @param {(_: ResponseData) => void} options.on_finish
+    * @param {(_: Error) => void} options.on_error
+*/
 export async function POST({
     domain=DEFAULT_SERVER_DOMAIN,
     endpoint="",
     body="",
     request_params={},
     content_type="application/json",
-    on_finish=(/** @type {ResponseData} */ _) => {},
-    on_error=(/** @type {any} */ _) => {}
+    on_finish=(_) => {},
+    on_error=(_) => {}
 }) {
+    let body_final = body
+    if (typeof body_final !== "string")
+        body_final = JSON.stringify(body_final)
+
     fetch(domain+endpoint+"?"+new URLSearchParams(request_params), 
         { 
             method: "POST",
-            body: body,
+            body: body_final,
             credentials: "include",
             headers: { 
                 "Content-Type": content_type
             }
         }).then(async (response) => {
-            /** @type {Map} */
-            let body = await response.json()
-            if (!body){
-                on_finish(new ResponseData())
+            let body
+            let content_type = response.headers.get("content-type")
+            console.log(content_type)
+            if (content_type === "application/json")
+                body = await response.json()
+            else {
+                body = await response.text()
+
+                on_finish(new ResponseData(
+                    response.status,
+                    true,
+                    "",
+                    body
+                ))
                 return
             }
-            let status = body.get("status")
-            let success = body.get("success")
-            let message = body.get("message")
-            let data = body.get("data")
+
+            let status = response.status
+            let success = body.success
+            let message = body.message
+            let data = body.data
             on_finish(new ResponseData(status, success, message, data))
 
-        }).catch((response) => {
+        }).catch((/** @type {Error} */ response) => {
             on_error(response)
         })
 }

@@ -59,14 +59,14 @@ function SignupPage() {
 
         POST({
             endpoint: "/signin",
-            body: JSON.stringify({
+            body: {
                 data: {
                     first_name: first_name,
                     last_name: last_name,
                     email: email,
                     password: hashedPassword,
                 }
-            }),
+            },
             on_finish: (data) => {
                 if (data.success) {
                     navigate("/login")
