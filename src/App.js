@@ -5,6 +5,7 @@ import CallPage from './components/pages/call/CallPage';
 import HomePage from './components/pages/home/HomePage';
 import AccountProfilePage from './components/pages/account_profile/AccountProfilePage';
 import LoginPage from './components/pages/login/LoginPage';
+import SignupPage from './components/pages/signup/SignupPage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route path="/call" element={<CallPage />} />
             <Route path="/account-profile" element={<AccountProfilePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
   );
