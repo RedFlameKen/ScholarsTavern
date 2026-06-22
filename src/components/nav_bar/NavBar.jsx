@@ -44,9 +44,9 @@ function NavBar() {
                     <img src={pendingIcon} alt="Pending" />
                 </button>
                 <button 
-                    className={`nav_icon ${isActive("/account-profile") ? "nav_icon--active" : ""}`} 
+                    className={`nav_icon ${isActive("/profile") ? "nav_icon--active" : ""}`} 
                     aria-label="Account" 
-                    onClick={() => navigate("/account-profile")}
+                    onClick={() => navigate("/profile")}
                 >
                     <img src={accountIcon} alt="Account" />
                 </button>
