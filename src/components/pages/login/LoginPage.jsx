@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom"
 import "../../../styles/ColorPalette.css"
 import "./LoginPage.css"
 import NavBarTop from "../../nav_bar_top/NavBarTop";
@@ -73,6 +72,7 @@ function LoginPage() {
                 if (response.status === 200) {
                     // TODO: post completion
                     console.log(`server: ${response.message}`)
+                    navigate("/home")
                 }
 
             },
