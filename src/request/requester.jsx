@@ -1,5 +1,5 @@
 // @ts-check
-const DEFAULT_SERVER_DOMAIN = "https://thinkpad-x230.taila38b71.ts.net"
+const DEFAULT_SERVER_DOMAIN = "https://scholarstavernserver.onrender.com"
 
 class ResponseData {
     status = 0
