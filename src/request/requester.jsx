@@ -112,3 +112,16 @@ export async function POST({
             on_error(response)
         })
 }
+
+export async function checkAuth({
+    domain=DEFAULT_SERVER_DOMAIN,
+}) {
+    console.log("executed GET")
+    const response = await fetch(domain+"/auth", 
+        { 
+            method: "GET",
+            credentials: "include",
+        })
+    const result = await response.json()
+    return result.success;
+}

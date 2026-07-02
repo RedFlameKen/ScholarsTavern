@@ -3,9 +3,20 @@ import "./LandingPage.css"
 import NavBarTop from "../../nav_bar_top/NavBarTop";
 import RoundedButton from "../../rounded_button/RoundedButton";
 import { useNavigate } from "react-router-dom";
+import { checkAuth } from "../../../request/requester";
+import { useEffect } from "react";
 
 function LandingPage() {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        async function verify(){
+            if (await checkAuth({})) {
+                navigate("/home", {replace: true})
+            }
+        }
+        verify();
+    }, [navigate])
 
     return (
         <div id="landing_page">

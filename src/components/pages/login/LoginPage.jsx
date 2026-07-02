@@ -3,11 +3,19 @@ import "./LoginPage.css"
 import NavBarTop from "../../nav_bar_top/NavBarTop";
 import RoundedButton from "../../rounded_button/RoundedButton";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { POST } from "../../../request/requester";
+import { useEffect, useState } from "react";
+import { POST, checkAuth } from "../../../request/requester";
 
 function LoginPage() {
     const navigate = useNavigate();
+    useEffect(() => {
+        async function verify(){
+            if (await checkAuth({})) {
+                navigate("/home", {replace: true})
+            }
+        }
+        verify();
+    }, [navigate])
 
     const [errors, setErrors] = useState({});
 
