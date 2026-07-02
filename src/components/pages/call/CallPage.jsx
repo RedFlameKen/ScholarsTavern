@@ -1,4 +1,4 @@
-const sock = new WebSocket("ws://localhost:8000/call/")
+const sock = new WebSocket("wss://scholarstavernserver.onrender.com/call/")
 
 const peer = new RTCPeerConnection({
     iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
