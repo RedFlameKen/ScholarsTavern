@@ -7,7 +7,7 @@ import addIcon from "../../../assets/icons/Add.svg";
 import PrivateIcon from "../../../assets/icons/Private.svg";
 import PublicIcon from "../../../assets/icons/Public.svg";
 
-import { checkAuth, POST } from "../../../request/requester";
+import { checkAuth, POST, GET } from "../../../request/requester";
 
 function HomePage() {
     let navigate = useNavigate();
@@ -19,12 +19,34 @@ function HomePage() {
         }
         verify();
     }, [navigate])
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isPublic, setPublic] = useState(false);
     const [tags, setTags] = useState([""]);
 
     const [groups, setGroups] = useState([]);
     const [groupName, setGroupName] = useState("");
+
+    useEffect(() => {
+        GET({
+            endpoint: "/group/",
+            on_finish: (response) => {
+                if (!response.success) {
+                    return;
+                }
+
+                let memberships = response.data.memberships;
+                const newGroups = memberships.map((membership) => ({
+                    data: {
+                        id: membership.id,
+                        name: membership.name,
+                        is_public: membership.is_public
+                    }
+                }))
+                setGroups([...groups, ...newGroups]);
+            }
+        })
+    }, [])
 
     function handleTagChange(index, value) {
         const updatedTags = [...tags];
