@@ -70,7 +70,7 @@ export async function POST({
     request_params={},
     content_type="application/json",
     on_finish=(_) => {},
-    on_error=(_) => {}
+    on_error=(error) => {console.log(error)}
 }) {
     let body_final = body
     if (typeof body_final !== "string")

@@ -7,7 +7,7 @@ import addIcon from "../../../assets/icons/Add.svg";
 import PrivateIcon from "../../../assets/icons/Private.svg";
 import PublicIcon from "../../../assets/icons/Public.svg";
 
-import { checkAuth } from "../../../request/requester";
+import { checkAuth, POST } from "../../../request/requester";
 
 function HomePage() {
     let navigate = useNavigate();
@@ -20,7 +20,7 @@ function HomePage() {
         verify();
     }, [navigate])
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [visibility, setVisibility] = useState('private');
+    const [isPublic, setPublic] = useState(false);
     const [tags, setTags] = useState([""]);
 
     const [groups, setGroups] = useState([]);
@@ -50,20 +50,30 @@ function HomePage() {
         if (!groupName.trim()) return;
 
         const newGroup = {
-            id: Date.now(),
-            name: groupName,
-            tags: tags.filter(tag => tag.trim() !== ""),
-            visibility: visibility
+            data: {
+                name: groupName,
+                tags: tags.filter(tag => tag.trim() !== ""),
+                is_public: isPublic
+            }
         };
 
-        setGroups([...groups, newGroup]);
+        POST({
+            endpoint: "/group/create",
+            body: newGroup,
+            on_finish: (response) => {
+                if (response.success) {
+                    setGroups([...groups, newGroup]);
+                }
+            },
+        })
+
         closeModal();
     }
 
     const openModal = () => {
         setGroupName("");
         setTags([""]);
-        setVisibility("private");
+        setPublic(false);
         setIsModalOpen(true);
     };
 
@@ -85,15 +95,15 @@ function HomePage() {
                     {groups.map((group) => (
                         <div key={group.id} className="group_card">
                             <div className="group_card_banner">
-                                <h3>{group.name}</h3>
+                                <h3>{group.data.name}</h3>
                             </div>
                             <div className="group_card_body">
                                 {/* Mid section can display tags or stay clean as pictured */}
                             </div>
                             <div className="group_card_footer">
                                 <img
-                                    src={group.visibility === "public" ? PublicIcon : PrivateIcon}
-                                    alt={group.visibility}
+                                    src={group.data.is_public ? PublicIcon : PrivateIcon}
+                                    alt={group.data.is_public}
                                     className="card_visibility_icon"
                                 />
                                 <button type="button" className="card_menu_btn">
@@ -162,8 +172,8 @@ function HomePage() {
                                     id="public"
                                     name="visibility"
                                     value="public"
-                                    checked={visibility === 'public'}
-                                    onChange={() => setVisibility('public')}
+                                    checked={isPublic}
+                                    onChange={() => setPublic(true)}
                                 />
                             </label>
 
@@ -177,8 +187,8 @@ function HomePage() {
                                     id="private"
                                     name="visibility"
                                     value="private"
-                                    checked={visibility === 'private'}
-                                    onChange={() => setVisibility('private')}
+                                    checked={isPublic}
+                                    onChange={() => setPublic(false)}
                                 />
                             </label>
                         </div>
