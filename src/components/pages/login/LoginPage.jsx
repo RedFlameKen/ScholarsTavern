@@ -10,7 +10,7 @@ function LoginPage() {
     const navigate = useNavigate();
     useEffect(() => {
         async function verify(){
-            if (await checkAuth({})) {
+            if ((await checkAuth({})).success) {
                 navigate("/home", {replace: true})
             }
         }
