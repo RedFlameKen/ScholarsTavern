@@ -3,22 +3,168 @@
     height: 100vh;
     display: flex;
     flex-direction: row;
+    font-family: Arial, Helvetica, sans-serif;
+    box-sizing: border-box;
 }
 
+/* --- CHANNELS SIDEBAR SECTION --- */
 #channels_section {
     display: flex;
+    flex-direction: column;
     align-items: stretch;
     width: 20%;
     margin: 5px;
     background-color: var(--st-primary);
+    border-radius: 12px;
+    padding: 15px 10px;
+    box-sizing: border-box;
 }
 
+.channels-header {
+    font-family: "Cinzel Decorative", cursive, serif;
+    color: var(--st-text-color);
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    font-size: 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 10px;
+}
+
+.channels-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-y: auto;
+}
+
+.channel-item {
+    color: var(--st-text-color);
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 15px;
+}
+
+.channel-item:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.channel-item.active {
+    background-color: var(--st-bg-extra);
+    color: var(--st-bg-light);
+    font-weight: bold;
+}
+
+/* --- MAIN CHAT SECTION --- */
 #main_section {
     display: flex;
+    flex-direction: column;
     align-items: stretch;
-    width: 70%;
+    width: 75%;
+    /* Bumped up layout weight slightly for better screen spacing */
     margin: 5px;
-    background-color: var(--st-bg);
+    background-color: #dbc6b0;
+    /* Matching parchment color */
     border: 1px solid var(--st-text-color);
     border-radius: 12px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.chat-room-header {
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 15px 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chat-room-header h2 {
+    font-family: "Cinzel Decorative", cursive, serif;
+    margin: 0;
+    font-size: 20px;
+    color: #0d0c0c;
+}
+
+/* Message Feed Layout */
+.messages-log {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message-bubble {
+    background-color: #f7f3f3;
+    /* Matching light input field color */
+    padding: 12px 16px;
+    border-radius: 12px;
+    max-width: 85%;
+    align-self: flex-start;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.message-meta {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 4px;
+    font-size: 12px;
+}
+
+.message-sender {
+    font-weight: bold;
+    color: #0d0c0c;
+}
+
+.message-time {
+    color: #757575;
+}
+
+.message-text {
+    margin: 0;
+    color: #222222;
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+/* Chat Input Bar Form Layout */
+.chat-input-area {
+    display: flex;
+    padding: 15px 20px;
+    gap: 10px;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chat-field {
+    flex: 1;
+    background-color: #f7f3f3;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 15px;
+    color: #0d0c0c;
+    box-sizing: border-box;
+}
+
+.chat-field:focus {
+    outline: 2px solid var(--st-bg-extra);
+}
+
+.chat-send-btn {
+    background-color: var(--st-bg-extra, #1a1a1a);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 0 20px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.chat-send-btn:hover {
+    opacity: 0.9;
 }
