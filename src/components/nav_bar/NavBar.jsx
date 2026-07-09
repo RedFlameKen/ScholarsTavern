@@ -40,6 +40,7 @@ function NavBar() {
                 <button 
                     className={`nav_icon ${isActive("/call") ? "nav_icon--active" : ""}`} 
                     aria-label="Pending"
+                    onClick={() => navigate("/call")}
                 >
                     <img src={pendingIcon} alt="Pending" />
                 </button>
