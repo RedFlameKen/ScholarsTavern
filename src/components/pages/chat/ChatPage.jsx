@@ -2,8 +2,11 @@ import { useState } from "react";
 import NavBar from "../../nav_bar/NavBar";
 import "../../../styles/ColorPalette.css";
 import "./ChatPage.css";
+import { useParams } from "react-router-dom";
 
+// TODO: create a system to open the correct group
 function ChatPage() {
+    const { group_id } = useParams()
     // Mock data for tavern channels
     const [channels] = useState(["# general-lounge", "# research-hall", "# trade-post", "# rumors-board"]);
     const [activeChannel, setActiveChannel] = useState("# general-lounge");
