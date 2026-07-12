@@ -38,17 +38,41 @@
     overflow-y: auto;
 }
 
+.channel-group {
+    color: var(--st-text-color);
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.channel-group:hover {
+    color: var(--st-bg-light);
+    font-weight: bold;
+    cursor: pointer;
+}
+
 .channel-item {
     color: var(--st-text-color);
     padding: 10px;
     border-radius: 8px;
-    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+}
+
+.channel-item-label {
+    color: var(--st-text-color);
     transition: background-color 0.2s ease;
     font-size: 15px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .channel-item:hover {
     background-color: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
 }
 
 .channel-item.active {

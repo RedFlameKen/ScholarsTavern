@@ -4,6 +4,13 @@ import "../../../styles/ColorPalette.css";
 import "./ChatPage.css";
 import { useParams } from "react-router-dom";
 import { GET } from "../../../request/requester";
+import voiceIcon from "../../../assets/icons/Voice.svg"
+import tagIcon from "../../../assets/icons/Tag.svg"
+
+const ChannelType = {
+    CHAT: "chat",
+    VOICE: "voice",
+}
 
 // TODO: create a system to open the correct group
 function ChatPage() {
@@ -13,7 +20,7 @@ function ChatPage() {
 
     // Mock data for tavern channels
     // const [channels] = useState(["# general-lounge", "# research-hall", "# trade-post", "# rumors-board"]);
-    const [activeChannel, setActiveChannel] = useState({id: 0, name: "", channels: []});
+    const [activeChannel, setActiveChannel] = useState({ id: 0, name: "", type: ChannelType.CHAT });
 
     useEffect(() => {
         GET({
@@ -31,14 +38,11 @@ function ChatPage() {
                 let newChannels = []
                 for (const channel_group of channelGroups) {
                     newChannels = [...newChannels, channel_group]
-                    // TODO: add a channel group
-                    // TODO: add a chat channel
-                    // TODO: add a voice channel
                 }
 
                 setChannels(newChannels)
 
-                setActiveChannel(newChannels[0])
+                setActiveChannel(newChannels[0].channels[0])
             }
         })
 
@@ -66,14 +70,50 @@ function ChatPage() {
         setInputMessage("");
     };
 
-    function createChannelGroup(channel) {
+    function createChannelItemIcon(type) {
+        let icon;
+        switch (type) {
+            default:
+            case ChannelType.CHAT:
+                icon = tagIcon;
+                break;
+            case ChannelType.VOICE:
+                icon = voiceIcon;
+                break;
+        }
+
+        return (
+            <div className="channel-item-icon">
+                <img src={icon} />
+            </div>
+        )
+    }
+
+    function createChannelItem(channel) {
         return (
             <div
                 key={channel.id}
-                className={`channel-item ${activeChannel.id === channel.id ? "active" : ""}`}
+                className={`channel-item ${
+                    activeChannel.id === channel.id &&
+                    activeChannel.type == channel.type ? "active" : ""}`}
                 onClick={() => setActiveChannel(channel)}
             >
-                {channel.name}
+                {createChannelItemIcon(channel.type)}
+                <span className="channel-item-label">{channel.name}</span>
+            </div>
+        )
+    }
+
+    function createChannelGroup(channelGroup) {
+        return (
+            <div key={channelGroup.id} className="channel-group-wrapper">
+                <div className={`channel-group`}>
+                    {channelGroup.name}
+                </div>
+                {channelGroup.channels.map(channel => (
+                    createChannelItem(channel)
+                ))
+                }
             </div>
         )
     }
