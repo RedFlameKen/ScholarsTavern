@@ -1,15 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../../nav_bar/NavBar";
 import "../../../styles/ColorPalette.css";
 import "./ChatPage.css";
 import { useParams } from "react-router-dom";
+import { GET } from "../../../request/requester";
 
 // TODO: create a system to open the correct group
 function ChatPage() {
     const { group_id } = useParams()
+    const [groupName, setGroupName] = useState("")
+    const [channels, setChannels] = useState([])
+
     // Mock data for tavern channels
-    const [channels] = useState(["# general-lounge", "# research-hall", "# trade-post", "# rumors-board"]);
-    const [activeChannel, setActiveChannel] = useState("# general-lounge");
+    // const [channels] = useState(["# general-lounge", "# research-hall", "# trade-post", "# rumors-board"]);
+    const [activeChannel, setActiveChannel] = useState({id: 0, name: "", channels: []});
+
+    useEffect(() => {
+        GET({
+            endpoint: `/group/${group_id}`,
+            on_finish: (response) => {
+                if (!response.success) {
+                    console.log(`unable to get channels: ${response.message}`)
+                    return
+                }
+
+                setGroupName(response.data.group_name)
+
+                const channelGroups = response.data.channel_groups
+
+                let newChannels = []
+                for (const channel_group of channelGroups) {
+                    newChannels = [...newChannels, channel_group]
+                    // TODO: add a channel group
+                    // TODO: add a chat channel
+                    // TODO: add a voice channel
+                }
+
+                setChannels(newChannels)
+
+                setActiveChannel(newChannels[0])
+            }
+        })
+
+    }, [])
 
     // Mock data for messages
     const [messages, setMessages] = useState([
@@ -33,30 +66,36 @@ function ChatPage() {
         setInputMessage("");
     };
 
+    function createChannelGroup(channel) {
+        return (
+            <div
+                key={channel.id}
+                className={`channel-item ${activeChannel.id === channel.id ? "active" : ""}`}
+                onClick={() => setActiveChannel(channel)}
+            >
+                {channel.name}
+            </div>
+        )
+    }
+
     return (
         <div id="chat_page">
             <NavBar />
 
             {/* Sidebar: Tavern Channels */}
             <div id="channels_section">
-                <h3 className="channels-header">Tavern Rooms</h3>
+                <h3 className="channels-header">{groupName}</h3>
                 <div className="channels-list">
-                    {channels.map((channel) => (
-                        <div
-                            key={channel}
-                            className={`channel-item ${activeChannel === channel ? "active" : ""}`}
-                            onClick={() => setActiveChannel(channel)}
-                        >
-                            {channel}
-                        </div>
-                    ))}
+                    {channels.map((channel) => {
+                        return createChannelGroup(channel)
+                    })}
                 </div>
             </div>
 
             {/* Main Area: Chat Room Logs */}
             <div id="main_section">
                 <div className="chat-room-header">
-                    <h2>{activeChannel}</h2>
+                    <h2>{activeChannel.name}</h2>
                 </div>
 
                 <div className="messages-log">
@@ -75,7 +114,7 @@ function ChatPage() {
                 <form className="chat-input-area" onSubmit={handleSendMessage}>
                     <input
                         type="text"
-                        placeholder={`Message ${activeChannel}...`}
+                        placeholder={`Message ${activeChannel.name}...`}
                         value={inputMessage}
                         onChange={(e) => setInputMessage(e.target.value)}
                         className="chat-field"
