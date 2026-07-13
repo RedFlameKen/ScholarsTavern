@@ -29,8 +29,9 @@ function NavBar() {
                     <img src={groupsIcon} alt="Groups" />
                 </button>
                 <button 
-                    className={`nav_icon ${isActive("/chat") ? "nav_icon--active" : ""}`} 
+                    className={`nav_icon ${isActive("/search") ? "nav_icon--active" : ""}`} 
                     aria-label="Search"
+                    onClick={() => navigate("/search")}
                 >
                     <img src={searchIcon} alt="Search" />
                 </button>
