@@ -60,15 +60,17 @@
     text-align: center;
     gap: 1.35rem;
     box-shadow: none;
-    cursor: pointer;
     transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
+.group_card:hover,
+.group_card:focus-visible,
 .create_card:hover,
 .create_card:focus-visible {
     transform: translateY(-2px);
     border-color: rgba(76,76,76,0.35);
     outline: none;
+    cursor: pointer;
 }
 
 .create_card_icon {

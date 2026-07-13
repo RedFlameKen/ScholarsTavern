@@ -14,7 +14,7 @@ function App() {
         <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<HomePage />} />
-            <Route path="/chat" element={<ChatPage />} />
+            <Route path="/chat/:group_id" element={<ChatPage />} />
             <Route path="/call" element={<CallPage />} />
             <Route path="/profile" element={<AccountProfilePage />} />
             <Route path="/login" element={<LoginPage />} />

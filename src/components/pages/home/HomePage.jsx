@@ -13,8 +13,8 @@ function HomePage() {
     let navigate = useNavigate();
     useEffect(() => {
         async function verify() {
-            if (!(await checkAuth({})).success){
-                navigate("/login", {replace: true});
+            if (!(await checkAuth({})).success) {
+                navigate("/login", { replace: true });
             }
         }
         verify();
@@ -92,10 +92,42 @@ function HomePage() {
         closeModal();
     }
 
+    // TODO: onclick, view chat view
+    function createGroup(group) {
+        console.log(group)
+        return (
+            <div 
+                key={group.data.id}
+                className="group_card"
+                onClick={() => {
+                    navigate(`/chat/${group.data.id}`)
+                }}
+            >
+                <div className="group_card_banner">
+                    <h3>{group.data.name}</h3>
+                </div>
+                <div className="group_card_body">
+                    {/* Mid section can display tags or stay clean as pictured */}
+                </div>
+                <div className="group_card_footer">
+                    <img
+                        src={group.data.is_public ? PublicIcon : PrivateIcon}
+                        alt={group.data.is_public}
+                        className="card_visibility_icon"
+                    />
+                    <button type="button" className="card_menu_btn">
+                        {/* Substitute with your menu icon/SVG or use three periods */}
+                        <span className="dots_icon">⋮</span>
+                    </button>
+                </div>
+            </div>
+        )
+    }
+
     const openModal = () => {
         setGroupName("");
         setTags([""]);
-        setPublic(false);
+        setPublic(true);
         setIsModalOpen(true);
     };
 
@@ -115,25 +147,7 @@ function HomePage() {
                 <section id="group_cards">
                     {/* 3. Render created group cards dynamically */}
                     {groups.map((group) => (
-                        <div key={group.id} className="group_card">
-                            <div className="group_card_banner">
-                                <h3>{group.data.name}</h3>
-                            </div>
-                            <div className="group_card_body">
-                                {/* Mid section can display tags or stay clean as pictured */}
-                            </div>
-                            <div className="group_card_footer">
-                                <img
-                                    src={group.data.is_public ? PublicIcon : PrivateIcon}
-                                    alt={group.data.is_public}
-                                    className="card_visibility_icon"
-                                />
-                                <button type="button" className="card_menu_btn">
-                                    {/* Substitute with your menu icon/SVG or use three periods */}
-                                    <span className="dots_icon">⋮</span>
-                                </button>
-                            </div>
-                        </div>
+                        createGroup(group)
                     ))}
 
                     {/* The Create Group Trigger Card */}
@@ -195,7 +209,7 @@ function HomePage() {
                                     name="visibility"
                                     value="public"
                                     checked={isPublic}
-                                    onChange={() => setPublic(true)}
+                                    onChange={() => { setPublic(true) }}
                                 />
                             </label>
 
@@ -209,8 +223,8 @@ function HomePage() {
                                     id="private"
                                     name="visibility"
                                     value="private"
-                                    checked={isPublic}
-                                    onChange={() => setPublic(false)}
+                                    checked={!isPublic}
+                                    onChange={() => { setPublic(false) }}
                                 />
                             </label>
                         </div>
