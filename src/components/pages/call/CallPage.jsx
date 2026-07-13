@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { checkAuth } from "../../../request/requester";
+import { checkAuth, DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../../../request/requester";
 
 function CallPage() {
     const [remoteStreams, setRemoteStreams] = useState(new Map())
@@ -185,7 +185,7 @@ function CallPage() {
             }
         }
 
-        sock.current = new WebSocket("wss://scholarstavernserver.onrender.com/call/")
+        sock.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/call/`)
 
         sock.current.onmessage = async (ev) => {
             if (ev.data == null)

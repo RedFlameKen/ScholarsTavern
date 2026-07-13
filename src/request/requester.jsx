@@ -1,5 +1,7 @@
 // @ts-check
-const DEFAULT_SERVER_DOMAIN = "https://scholarstavernserver.onrender.com"
+export const WEBSOCKET_PROTOCOL = "wss://"
+export const HTTP_PROTOCOL = "https://"
+export const DEFAULT_SERVER_DOMAIN = "scholarstavernserver.onrender.com"
 
 class ResponseData {
     status = 0
@@ -31,7 +33,7 @@ export function GET({
     on_error=(/** @type {any} */ _) => {}
 }) {
     console.log("executed GET")
-    fetch(domain+endpoint+"?"+new URLSearchParams(request_params), 
+    fetch(HTTP_PROTOCOL+domain+endpoint+"?"+new URLSearchParams(request_params), 
         { 
             method: "GET",
             credentials: "include",
@@ -76,7 +78,7 @@ export async function POST({
     if (typeof body_final !== "string")
         body_final = JSON.stringify(body_final)
 
-    fetch(domain+endpoint+"?"+new URLSearchParams(request_params), 
+    fetch(HTTP_PROTOCOL+domain+endpoint+"?"+new URLSearchParams(request_params), 
         { 
             method: "POST",
             body: body_final,
@@ -117,7 +119,7 @@ export async function checkAuth({
     domain=DEFAULT_SERVER_DOMAIN,
 }) {
     console.log("executed GET")
-    const response = await fetch(domain+"/auth", 
+    const response = await fetch(HTTP_PROTOCOL+domain+"/auth", 
         { 
             method: "GET",
             credentials: "include",

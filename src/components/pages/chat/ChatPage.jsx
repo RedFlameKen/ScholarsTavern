@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import NavBar from "../../nav_bar/NavBar";
 import "../../../styles/ColorPalette.css";
 import "./ChatPage.css";
 import { useParams } from "react-router-dom";
-import { GET } from "../../../request/requester";
+import { checkAuth, GET, DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../../../request/requester";
 import voiceIcon from "../../../assets/icons/Voice.svg"
 import tagIcon from "../../../assets/icons/Tag.svg"
 
@@ -17,10 +17,15 @@ function ChatPage() {
     const { group_id } = useParams()
     const [groupName, setGroupName] = useState("")
     const [channels, setChannels] = useState([])
+    const chatSocket = useRef(null)
 
-    // Mock data for tavern channels
-    // const [channels] = useState(["# general-lounge", "# research-hall", "# trade-post", "# rumors-board"]);
+    const cur_user_id = useRef(-1)
+
     const [activeChannel, setActiveChannel] = useState({ id: 0, name: "", type: ChannelType.CHAT });
+
+
+    const [chats, setChats] = useState([]);
+    const [inputMessage, setInputMessage] = useState("");
 
     useEffect(() => {
         GET({
@@ -42,31 +47,67 @@ function ChatPage() {
 
                 setChannels(newChannels)
 
-                setActiveChannel(newChannels[0].channels[0])
+                setCurrentChannel(newChannels[0].channels[0])
             }
         })
 
-    }, [])
+        async function initUserId() {
+            const result = await checkAuth({})
+            if (!result.success)
+                return
+            cur_user_id.current = parseInt(result.data.user_id)
+        }
 
-    // Mock data for messages
-    const [messages, setMessages] = useState([
-        { id: 1, sender: "Alchemist_John", text: "Has anyone managed to fix that webpack background image bug yet?", time: "4:32 PM" },
-        { id: 2, sender: "WizardCSS", text: "Aye, just use an absolute URL or download it locally into your assets folder!", time: "4:34 PM" }
-    ]);
-    const [inputMessage, setInputMessage] = useState("");
+        initUserId()
+
+    }, [group_id])
+
+    function setCurrentChannel(channel) {
+        setActiveChannel(channel)
+
+        setChats([])
+
+        if (chatSocket.current)
+            chatSocket.current.close()
+
+        chatSocket.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/chat/${channel.id}`)
+
+        chatSocket.current.onmessage = async (ev) => {
+            if (ev.data === null)
+                return;
+
+            const data = JSON.parse(ev.data)
+
+            switch (data.type) {
+                case "load_chats":
+                    if (channel.type != ChannelType.CHAT) break;
+                    setChats(data.chats)
+                    break;
+                case "message_sent":
+                    if (channel.type != ChannelType.CHAT) break;
+                    setChats(prev => [
+                        ...prev, data.data
+                    ])
+                    break;
+            }
+
+        }
+
+    }
 
     const handleSendMessage = (e) => {
         e.preventDefault();
         if (!inputMessage.trim()) return;
 
-        const newMsg = {
-            id: messages.length + 1,
-            sender: "You", // Temporary fallback sender name
-            text: inputMessage,
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        };
-
-        setMessages([...messages, newMsg]);
+        chatSocket.current.send(JSON.stringify({
+            type: "message_sent",
+            chat: {
+                type: "text",
+                sender: cur_user_id.current,
+                text: inputMessage,
+                chat_channel_id: activeChannel.id
+            }
+        }))
         setInputMessage("");
     };
 
@@ -93,10 +134,9 @@ function ChatPage() {
         return (
             <div
                 key={channel.id}
-                className={`channel-item ${
-                    activeChannel.id === channel.id &&
-                    activeChannel.type == channel.type ? "active" : ""}`}
-                onClick={() => setActiveChannel(channel)}
+                className={`channel-item ${activeChannel.id === channel.id &&
+                        activeChannel.type === channel.type ? "active" : ""}`}
+                onClick={() => setCurrentChannel(channel)}
             >
                 {createChannelItemIcon(channel.type)}
                 <span className="channel-item-label">{channel.name}</span>
@@ -114,6 +154,21 @@ function ChatPage() {
                     createChannelItem(channel)
                 ))
                 }
+            </div>
+        )
+    }
+
+    function createMessageBubble(chat) {
+        return (
+            <div key={chat.id} className="message-bubble">
+                <div className="message-meta">
+                    <span className="message-sender">{chat.sender}</span>
+                    <span className="message-time">{new Date(chat.time).toLocaleDateString([], {
+                        hour: "numeric",
+                        minute: "2-digit"
+                    })}</span>
+                </div>
+                <p className="message-text">{chat.text}</p>
             </div>
         )
     }
@@ -139,14 +194,8 @@ function ChatPage() {
                 </div>
 
                 <div className="messages-log">
-                    {messages.map((msg) => (
-                        <div key={msg.id} className="message-bubble">
-                            <div className="message-meta">
-                                <span className="message-sender">{msg.sender}</span>
-                                <span className="message-time">{msg.time}</span>
-                            </div>
-                            <p className="message-text">{msg.text}</p>
-                        </div>
+                    {chats.map((msg) => (
+                        createMessageBubble(msg)
                     ))}
                 </div>
 
