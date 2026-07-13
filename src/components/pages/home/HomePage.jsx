@@ -43,10 +43,10 @@ function HomePage() {
                         is_public: membership.is_public
                     }
                 }))
-                setGroups([...groups, ...newGroups]);
+                setGroups(newGroups);
             }
         })
-    }, [groups])
+    }, [])
 
     function handleTagChange(index, value) {
         const updatedTags = [...tags];
