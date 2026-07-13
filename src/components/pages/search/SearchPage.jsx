@@ -5,19 +5,9 @@ import "./SearchPage.css";
 import SearchIcon from "../../../assets/icons/Search.svg";
 import PrivateIcon from "../../../assets/icons/Private.svg";
 import PublicIcon from "../../../assets/icons/Public.svg";
-import NoProfilePicture from "../../../assets/icons/Account.svg";
+// import NoProfilePicture from "../../../assets/icons/Account.svg";
 import { GET } from "../../../request/requester";
 import { useSearchParams } from "react-router-dom";
-
-const initialGroups = [
-    {
-        id: 1,
-        name: "Python Programming Guidance",
-        is_public: true,
-        tags: ["programming", "python"],
-        members: ["pfp1.jpg", "pfp2.jpg", ""]
-    }
-];
 
 function SearchPage() {
     const [groupsData, setResults] = useState([]);
@@ -49,7 +39,7 @@ function SearchPage() {
                 )
             }
         })
-    }, [])
+    }, [searchParams])
 
     return (
         <div className="container">

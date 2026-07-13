@@ -46,7 +46,7 @@ function HomePage() {
                 setGroups([...groups, ...newGroups]);
             }
         })
-    }, [])
+    }, [groups])
 
     function handleTagChange(index, value) {
         const updatedTags = [...tags];

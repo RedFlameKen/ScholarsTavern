@@ -209,6 +209,8 @@ function CallPage() {
                 case "ice-candidate":
                     await handleIceCandidate(data)
                     break;
+                default:
+                    break;
             }
 
         }

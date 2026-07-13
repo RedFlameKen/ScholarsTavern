@@ -80,14 +80,16 @@ function ChatPage() {
 
             switch (data.type) {
                 case "load_chats":
-                    if (channel.type != ChannelType.CHAT) break;
+                    if (channel.type !== ChannelType.CHAT) break;
                     setChats(data.chats)
                     break;
                 case "message_sent":
-                    if (channel.type != ChannelType.CHAT) break;
+                    if (channel.type !== ChannelType.CHAT) break;
                     setChats(prev => [
                         ...prev, data.data
                     ])
+                    break;
+                default:
                     break;
             }
 
@@ -125,7 +127,7 @@ function ChatPage() {
 
         return (
             <div className="channel-item-icon">
-                <img src={icon} />
+                <img src={icon} alt=""/>
             </div>
         )
     }
