@@ -38,36 +38,53 @@
     overflow-y: auto;
 }
 
-.channel-group {
-    color: var(--st-text-color);
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 15px;
+.channel-group-wrapper {
+    margin-bottom: 15px;
 }
 
-.channel-group:hover {
-    color: var(--st-bg-light);
+.channel-group {
+    color: var(--st-text-color);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: bold;
-    cursor: pointer;
+    text-transform: uppercase;
+    opacity: 0.7;
+    letter-spacing: 0.5px;
 }
 
 .channel-item {
     color: var(--st-text-color);
-    padding: 10px;
+    padding: 8px 10px;
     border-radius: 8px;
     transition: background-color 0.2s ease;
     display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 3px;
+}
+
+.channel-item-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+}
+
+.channel-item-icon img {
+    width: 100%;
+    height: 100%;
+    filter: invert(1);
+    /* Inverts icon paths to make them white/light */
 }
 
 .channel-item-label {
     color: var(--st-text-color);
-    transition: background-color 0.2s ease;
     font-size: 15px;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-    margin-top: auto;
-    margin-bottom: auto;
 }
 
 .channel-item:hover {
@@ -81,22 +98,25 @@
     font-weight: bold;
 }
 
-/* --- MAIN CHAT SECTION --- */
+.channel-item.active .channel-item-label {
+    color: var(--st-bg-light);
+}
+
+/* --- MAIN SECTIONS LAYOUT --- */
 #main_section {
     display: flex;
     flex-direction: column;
     align-items: stretch;
     width: 75%;
-    /* Bumped up layout weight slightly for better screen spacing */
     margin: 5px;
     background-color: #dbc6b0;
-    /* Matching parchment color */
     border: 1px solid var(--st-text-color);
     border-radius: 12px;
     box-sizing: border-box;
     overflow: hidden;
 }
 
+/* --- TEXT CHAT VIEW STYLING --- */
 .chat-room-header {
     background-color: rgba(0, 0, 0, 0.05);
     padding: 15px 20px;
@@ -110,7 +130,6 @@
     color: #0d0c0c;
 }
 
-/* Message Feed Layout */
 .messages-log {
     flex: 1;
     padding: 20px;
@@ -122,7 +141,6 @@
 
 .message-bubble {
     background-color: #f7f3f3;
-    /* Matching light input field color */
     padding: 12px 16px;
     border-radius: 12px;
     max-width: 85%;
@@ -153,7 +171,6 @@
     line-height: 1.4;
 }
 
-/* Chat Input Bar Form Layout */
 .chat-input-area {
     display: flex;
     padding: 15px 20px;
@@ -191,4 +208,169 @@
 
 .chat-send-btn:hover {
     opacity: 0.9;
+}
+
+/* --- VOICE CALL VIEW STYLING --- */
+.voice-call-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    background-color: #dbc6b0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.voice-call-header {
+    background-color: #ad744a;
+    /* Warm brown top banner */
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.15);
+}
+
+.group-name {
+    font-family: "Cinzel Decorative", cursive, serif;
+    color: #0d0c0c;
+    font-size: 28px;
+    margin: 0;
+    font-weight: bold;
+}
+
+.participant-badge-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.overlap-avatars {
+    display: flex;
+    position: relative;
+    width: 65px;
+    height: 30px;
+}
+
+.avatar-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    position: absolute;
+    border: 2px solid #ad744a;
+}
+
+.dot-1 {
+    background-color: #555c61;
+    left: 0px;
+    z-index: 1;
+}
+
+.dot-2 {
+    background-color: #e5dac1;
+    left: 16px;
+    z-index: 2;
+}
+
+.dot-3 {
+    background-color: #5d3a24;
+    left: 32px;
+    z-index: 3;
+}
+
+.participant-count {
+    font-family: "Cinzel Decorative", cursive, serif;
+    font-size: 28px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.voice-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.grid-card {
+    display: flex;
+    align-items: stretch;
+}
+
+.user-stream-placeholder {
+    flex: 1;
+    background-color: #4a4d4f;
+    /* Dark grey video boxes */
+    border-radius: 16px;
+    position: relative;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.user-tag {
+    position: absolute;
+    bottom: 12px;
+    left: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.voice-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 25px;
+    background-color: #dbc6b0;
+}
+
+.control-btn {
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.circle-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #bfa58a;
+    /* Darker tan controls */
+    font-size: 18px;
+}
+
+.circle-btn:hover {
+    background-color: #ad9277;
+}
+
+.circle-btn.active-control {
+    background-color: #d9534f;
+    color: white;
+}
+
+.hangup-btn {
+    width: 84px;
+    height: 44px;
+    border-radius: 22px;
+    background-color: #b22d2d;
+    color: #ffffff;
+    font-size: 20px;
+    transform: rotate(135deg);
+    /* Turns the phone icon into a hangup button */
+}
+
+.hangup-btn:hover {
+    background-color: #912222;
 }
