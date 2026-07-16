@@ -84,6 +84,15 @@ body {
     position: relative;
     box-sizing: border-box;
     background-color: rgba(255, 255, 255, 0.05);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.group-card:hover,
+.group-card:focus-visible {
+    transform: translateY(-4px);
+    border-color: rgba(74, 74, 74, 0.6);
+    outline: none;
+    cursor: pointer;
 }
 
 .card-header {
@@ -190,4 +199,135 @@ body {
         left: 30px;
         right: auto;
     }
+}
+
+/*Join Group Popup*/
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  animation: overlayFadeIn 0.2s ease-out;
+}
+
+.popup-card {
+  width: 90%;
+  max-width: 420px;
+  background-color: #dfc2a5;
+  border-radius: 28px;
+  border: 1px solid #1c1c1c;
+  padding: 30px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-sizing: border-box;
+  animation: cardScaleIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/*Group Name*/
+.popup-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  margin: 0 0 20px 0;
+}
+
+/*Group Photo*/
+.popup-avatar-container {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.popup-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.popup-group-name {
+  font-family: 'Redressed', cursive;
+  font-size: 2.8rem;
+  color: #000000;
+  margin: 0 0 12px 0;
+  font-weight: normal;
+  line-height: 1.1;
+}
+
+/*Member Count*/
+.popup-member-count {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 35px;
+}
+
+.popup-member-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #cccccc;
+}
+
+.popup-member-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #1a1a1a;
+}
+
+/*Join Button*/
+.popup-join-btn {
+  width: 100%;
+  background-color: #d1d5db;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #000000;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  margin-bottom: 25px;
+}
+
+.popup-join-btn:hover {
+  background-color: #c4c8cc;
+}
+
+.popup-join-btn:active {
+  transform: scale(0.98);
+}
+
+/*Not Joining Button*/
+.popup-not-now-btn {
+  background: none;
+  border: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.popup-not-now-btn:hover {
+  opacity: 0.7;
 }

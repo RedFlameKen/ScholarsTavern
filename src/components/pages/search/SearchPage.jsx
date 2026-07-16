@@ -14,6 +14,8 @@ function SearchPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [searchParams] = useSearchParams()
 
+    const [selectedGroup, setSelectedGroup] = useState(null);
+
     const filteredGroups = groupsData.filter(group =>
         group.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         group.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -40,7 +42,12 @@ function SearchPage() {
             }
         })
     }, [searchParams])
-
+    
+    const handleJoinGroup = (group) => {
+        alert(`You requested to join: ${group.name}`);
+        setSelectedGroup(null);
+    };
+    
     return (
         <div className="container">
             <NavBar />
@@ -75,7 +82,7 @@ function SearchPage() {
                         <p style={{ textAlign: "center", fontSize: "1.2rem" }}>No groups found.</p>
                     ) : (
                         filteredGroups.map(group => (
-                            <section key={group.id} className="group-card">
+                            <section key={group.id} className="group-card" onClick={() => setSelectedGroup(group)}> 
                                 <div className="card-header">
                                     <h2 className="group-title">{group.name}</h2>
                                     <span className="visibility-icon" title={group.is_public ? "Public" : "Private"}>
@@ -117,6 +124,49 @@ function SearchPage() {
                     )}
                 </main>
             </div>
+
+            {selectedGroup && (
+                <div 
+                    className="modal-overlay" 
+                    onClick={() => setSelectedGroup(null)}
+                >
+                    <div 
+                        className="popup-card" 
+                        onClick={(e) => e.stopPropagation()}
+                    >   
+                        <h2 className="popup-title">Join Group?</h2>
+                        
+                        <div className="popup-avatar-container">
+                            <img 
+                                src= {PublicIcon} //tempororary photo
+                                alt="Group Icon" 
+                                className="popup-avatar-image"
+                            />
+                        </div>
+
+                        <h1 className="popup-group-name">{selectedGroup.name}</h1>
+
+                        <div className="popup-member-count">
+                            <span className="popup-member-dot"></span>
+                            <span className="popup-member-text">7 Group Members</span>
+                        </div>
+
+                        <button 
+                            className="popup-join-btn" 
+                            onClick={() => handleJoinGroup(selectedGroup)}
+                        >
+                            Join Group | {selectedGroup.name}
+                        </button>
+
+                        <button 
+                            className="popup-not-now-btn" 
+                            onClick={() => setSelectedGroup(null)}
+                        >
+                            Not Now
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
