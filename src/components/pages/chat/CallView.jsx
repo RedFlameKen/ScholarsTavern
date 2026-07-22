@@ -10,6 +10,7 @@ function CallView({ cur_user_id, channel, sock }) {
     const peers = useRef(new Map())
     const previewRef = useRef(null)
     const previewStreamRef = useRef(null)
+    const audioRef = useRef(null)
 
     const [firstName, setFirstName] = useState("User")
     const [lastName, setLastName] = useState("User")
@@ -23,7 +24,7 @@ function CallView({ cur_user_id, channel, sock }) {
 
         peer.onicecandidate = (ev) => {
             if (ev.candidate) {
-                if (sock.current && sock.current.readyState == 1) {
+                if (sock.current && sock.current.readyState === 1) {
                     sock.current.send(JSON.stringify({
                         type: "ice-candidate",
                         to: user.id,
@@ -45,12 +46,12 @@ function CallView({ cur_user_id, channel, sock }) {
             })
         }
 
-        let peer_obj = { 
+        let peer_obj = {
             peer: peer,
             pendingCandidates: [],
             connected: false,
             first_name: user.first_name,
-            last_name: user.last_name 
+            last_name: user.last_name
         }
         peers.current.set(user.id, peer_obj)
         return peer_obj
@@ -100,7 +101,7 @@ function CallView({ cur_user_id, channel, sock }) {
             const offer = await peer.createOffer();
             await peer.setLocalDescription(offer);
 
-            if (sock.current && sock.current.readyState == 1) {
+            if (sock.current && sock.current.readyState === 1) {
                 sock.current.send(JSON.stringify({
                     type: "offer",
                     to: user.id,
@@ -185,7 +186,7 @@ function CallView({ cur_user_id, channel, sock }) {
         setLastName(result.data.last_name)
 
         const call_stream = await navigator.mediaDevices.getUserMedia({
-            audio: false,
+            audio: true,
             video: true,
         });
 
@@ -198,10 +199,12 @@ function CallView({ cur_user_id, channel, sock }) {
             }
         }
 
+        audioRef.current = call_stream.getAudioTracks()[0]
+
         sock.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/call/`)
 
         sock.current.onmessage = async (ev) => {
-            if (ev.data == null)
+            if (ev.data === null)
                 return;
 
             const data = JSON.parse(ev.data)
@@ -236,7 +239,7 @@ function CallView({ cur_user_id, channel, sock }) {
                 sock.current.close()
             }
         }
-    }, [])
+    }, [sock])
 
     function RemoteVideo({ stream, first_name, last_name }) {
         const ref = useRef(null)
@@ -254,8 +257,8 @@ function CallView({ cur_user_id, channel, sock }) {
                         ref={ref}
                         autoPlay
                         playsInline
-                        width={200}
-                        height={180}
+                        width={"100%"}
+                        height={"100%"}
                     />
                     <span className="user-tag">{`${first_name} ${last_name}`}</span>
                 </div>
@@ -263,7 +266,7 @@ function CallView({ cur_user_id, channel, sock }) {
         )
     }
 
-    function createLocalVideo(){
+    function createLocalVideo() {
         return (
             <div className="grid-card">
                 <div className="user-stream-placeholder">
@@ -271,6 +274,7 @@ function CallView({ cur_user_id, channel, sock }) {
                         ref={previewRef}
                         autoPlay
                         playsInline
+                        muted={true}
                         width={"100%"}
                         height={"100%"}
                     />
@@ -280,7 +284,7 @@ function CallView({ cur_user_id, channel, sock }) {
         )
     }
 
-    function createRemoteVideo(id, stream){
+    function createRemoteVideo(id, stream) {
         const peer = peers.current.get(id)
         return (
             <RemoteVideo
@@ -304,7 +308,8 @@ function CallView({ cur_user_id, channel, sock }) {
         peers.current.clear();
 
         if (previewStreamRef.current) {
-            previewStreamRef.current.getTracks().forEach(track => track.stop())
+            previewStreamRef.current.getVideoTracks().forEach(track => track.stop())
+            previewStreamRef.current.getAudioTracks().forEach(track => track.stop())
             previewStreamRef.current = null
         }
 
@@ -336,7 +341,7 @@ function CallView({ cur_user_id, channel, sock }) {
             {/* Stream / Avatar Grid */}
             <div className="voice-grid">
                 {createLocalVideo()}
-                {[...remoteStreams].map(([id, stream]) => 
+                {[...remoteStreams].map(([id, stream]) =>
                     createRemoteVideo(id, stream)
                 )}
             </div>
@@ -354,7 +359,12 @@ function CallView({ cur_user_id, channel, sock }) {
                 </button>
                 <button
                     className={`control-btn circle-btn ${isMuted ? "active-control" : ""}`}
-                    onClick={() => setIsMuted(!isMuted)}
+                    onClick={() => {
+                        setIsMuted(!isMuted)
+                        if (audioRef.current) {
+                            audioRef.current.enabled = isMuted
+                        }
+                    }}
                 >
                     🎙️
                 </button>
