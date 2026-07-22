@@ -87,7 +87,7 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
 
     function createMessageBubble(chat) {
         return (
-            <div key={chat.id} className="message-bubble">
+            <div key={chat.id} className={`${chat.sender_id == cur_user_id.current ? "own-message-bubble" : "message-bubble "}`}>
                 <div className="message-meta">
                     <span className="message-sender">{chat.sender}</span>
                     <span className="message-time">
