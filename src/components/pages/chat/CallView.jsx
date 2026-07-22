@@ -8,7 +8,7 @@ import MicIcon from "../../../assets/icons/Mic.svg"
 import MicOffIcon from "../../../assets/icons/MicDisabled.svg"
 import CallEndIcon from "../../../assets/icons/CallEnd.svg"
 
-function CallView({ cur_user_id, channel, sock }) {
+function CallView({ cur_user_id, channel, sock, group_id }) {
     // Voice panel controls
     const [isMuted, setIsMuted] = useState(false);
     const [isDeafened, setIsDeafened] = useState(false);
@@ -218,7 +218,7 @@ function CallView({ cur_user_id, channel, sock }) {
         videoRef.current = call_stream.getVideoTracks()[0]
         videoRef.current.enabled = false
 
-        sock.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/call/`)
+        sock.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/call/${group_id}/${channel.id}`)
 
         sock.current.onmessage = async (ev) => {
             if (ev.data === null)

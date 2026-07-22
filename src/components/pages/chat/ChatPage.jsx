@@ -135,6 +135,7 @@ function ChatPage() {
             <div id="main_section">
                 {activeChannel.type === ChannelType.VOICE ? 
                     <CallView 
+                        group_id={group_id}
                         cur_user_id={cur_user_id}
                         channel={activeChannel}
                         sock={socket}
