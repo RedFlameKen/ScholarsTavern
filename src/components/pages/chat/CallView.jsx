@@ -1,16 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import { checkAuth, DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../../../request/requester";
+import VideoIcon from "../../../assets/icons/Video.svg"
+import VideoOffIcon from "../../../assets/icons/VideoDisabled.svg"
+import HeadphonesIcon from "../../../assets/icons/Headphones.svg"
+import HeadphonesOffIcon from "../../../assets/icons/HeadphonesDisabled.svg"
+import MicIcon from "../../../assets/icons/Mic.svg"
+import MicOffIcon from "../../../assets/icons/MicDisabled.svg"
+import CallEndIcon from "../../../assets/icons/CallEnd.svg"
 
 function CallView({ cur_user_id, channel, sock }) {
     // Voice panel controls
     const [isMuted, setIsMuted] = useState(false);
     const [isDeafened, setIsDeafened] = useState(false);
+    const [videoDisabled, setVideoDisabled] = useState(true);
 
     const [remoteStreams, setRemoteStreams] = useState(new Map())
     const peers = useRef(new Map())
     const previewRef = useRef(null)
     const previewStreamRef = useRef(null)
     const audioRef = useRef(null)
+    const videoRef = useRef(null)
 
     const [firstName, setFirstName] = useState("User")
     const [lastName, setLastName] = useState("User")
@@ -37,6 +46,12 @@ function CallView({ cur_user_id, channel, sock }) {
 
         peer.ontrack = (ev) => {
             const stream = ev.streams[0]
+
+            if (isDeafened) {
+                stream.getAudioTracks().forEach(track => {
+                    track.enabled = false;
+                });
+            }
 
             console.log(`adding remote stream of ${user}`)
             setRemoteStreams(prev => {
@@ -200,6 +215,8 @@ function CallView({ cur_user_id, channel, sock }) {
         }
 
         audioRef.current = call_stream.getAudioTracks()[0]
+        videoRef.current = call_stream.getVideoTracks()[0]
+        videoRef.current.enabled = false
 
         sock.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/call/`)
 
@@ -241,6 +258,14 @@ function CallView({ cur_user_id, channel, sock }) {
         }
     }, [sock])
 
+    function setDeafened(deafened) {
+        remoteStreams.forEach(stream => {
+            stream.getAudioTracks().forEach(track => {
+                track.enabled = !deafened;
+            });
+        });
+    }
+
     function RemoteVideo({ stream, first_name, last_name }) {
         const ref = useRef(null)
 
@@ -254,11 +279,11 @@ function CallView({ cur_user_id, channel, sock }) {
             <div className="grid-card">
                 <div className="user-stream-placeholder">
                     <video
+                        className="stream-video"
                         ref={ref}
                         autoPlay
                         playsInline
-                        width={"100%"}
-                        height={"100%"}
+                        muted={isDeafened}
                     />
                     <span className="user-tag">{`${first_name} ${last_name}`}</span>
                 </div>
@@ -271,12 +296,11 @@ function CallView({ cur_user_id, channel, sock }) {
             <div className="grid-card">
                 <div className="user-stream-placeholder">
                     <video
+                        className={`stream-video ${videoDisabled ? "stream-video-disabled" : ""}`}
                         ref={previewRef}
                         autoPlay
                         playsInline
                         muted={true}
-                        width={"100%"}
-                        height={"100%"}
                     />
                     <span className="user-tag">{`${firstName} ${lastName}`}</span>
                 </div>
@@ -349,13 +373,27 @@ function CallView({ cur_user_id, channel, sock }) {
             {/* Controls Panel */}
             <div className="voice-controls">
                 <button
-                    className={`control-btn circle-btn ${isDeafened ? "active-control" : ""}`}
-                    onClick={() => setIsDeafened(!isDeafened)}
+                    className={`control-btn circle-btn ${videoDisabled ? "active-control" : ""}`}
+                    onClick={() => {
+                        setVideoDisabled(!videoDisabled)
+                        if (videoRef.current) {
+                            videoRef.current.enabled = videoDisabled
+                        }
+                    }}
                 >
-                    🔊
+                {videoDisabled ? (<img src={VideoOffIcon} alt=""/>) : (<img src={VideoIcon} alt=""/>)}
+                </button>
+                <button
+                    className={`control-btn circle-btn ${isDeafened ? "active-control" : ""}`}
+                    onClick={() => {
+                        setIsDeafened(!isDeafened)
+                        setDeafened(!isDeafened)
+                    }}
+                >
+                    <img src={isDeafened ? HeadphonesOffIcon : HeadphonesIcon} alt=""/>
                 </button>
                 <button className="control-btn hangup-btn" onClick={handleDisconnectVoice}>
-                    📞
+                    <img src={CallEndIcon} alt=""/>
                 </button>
                 <button
                     className={`control-btn circle-btn ${isMuted ? "active-control" : ""}`}
@@ -366,7 +404,7 @@ function CallView({ cur_user_id, channel, sock }) {
                         }
                     }}
                 >
-                    🎙️
+                    <img src={isMuted ? MicOffIcon : MicIcon} alt=""/>
                 </button>
                 <button className="control-btn circle-btn">⚙️</button>
             </div>
