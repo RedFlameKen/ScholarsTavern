@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../../../request/requester";
 
 const ChannelType = {
@@ -9,6 +9,9 @@ const ChannelType = {
 function ChatView({ cur_user_id, channel, chatSocket }) {
     const [chats, setChats] = useState([]);
     const [inputMessage, setInputMessage] = useState("");
+    const messagesRef = useRef(null)
+    const scrollRef = useRef(null)
+    const initialLoadRef = useRef(true)
 
     const handleSendMessage = (e) => {
         e.preventDefault();
@@ -27,6 +30,28 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
     };
 
     useEffect(() => {
+        if (initialLoadRef.current) {
+            initialLoadRef.current = false
+            if (scrollRef.current) {
+                scrollRef.current.scrollIntoView()
+            }
+            return
+        }
+        const container = messagesRef.current;
+
+        const isNearBottom =
+            container.scrollHeight -
+            container.scrollTop -
+            container.clientHeight < 100;
+
+        if (isNearBottom) {
+            if (scrollRef.current) {
+                scrollRef.current.scrollIntoView({ behavior: "smooth" })
+            }
+        }
+    }, [chats])
+
+    useEffect(() => {
         chatSocket.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/chat/${channel.id}`);
 
         chatSocket.current.onmessage = async (ev) => {
@@ -38,6 +63,7 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
                 case "load_chats":
                     if (channel.type !== ChannelType.CHAT) break;
                     setChats(data.chats)
+                    initialLoadRef.current = true
                     break;
                 case "message_sent":
                     if (channel.type !== ChannelType.CHAT) break;
@@ -83,10 +109,11 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
                 <h2>{channel.name}</h2>
             </div>
 
-            <div className="messages-log">
+            <div ref={messagesRef} className="messages-log">
                 {chats.map((msg) => (
                     createMessageBubble(msg)
                 ))}
+                <div ref={scrollRef} />
             </div>
 
             {/* Message Input Box */}
