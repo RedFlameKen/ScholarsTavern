@@ -23,12 +23,14 @@ function CallView({ cur_user_id, channel, sock }) {
 
         peer.onicecandidate = (ev) => {
             if (ev.candidate) {
-                sock.current.send(JSON.stringify({
-                    type: "ice-candidate",
-                    to: user.id,
-                    from: cur_user_id.current,
-                    candidate: ev.candidate
-                }))
+                if (sock.current && sock.current.readyState == 1) {
+                    sock.current.send(JSON.stringify({
+                        type: "ice-candidate",
+                        to: user.id,
+                        from: cur_user_id.current,
+                        candidate: ev.candidate
+                    }))
+                }
             }
         }
 
@@ -293,10 +295,26 @@ function CallView({ cur_user_id, channel, sock }) {
     // Exit voice room button (returns to the first chat room)
     const handleDisconnectVoice = () => {
         // TODO: close streams and peers
+        setRemoteStreams([])
+
+        for (const peer_obj of peers.current.values()) {
+            peer_obj.peer.close()
+        }
+
+        peers.current.clear();
+
+        if (previewStreamRef.current) {
+            previewStreamRef.current.getTracks().forEach(track => track.stop())
+            previewStreamRef.current = null
+        }
+
+        if (previewRef.current) {
+            previewRef.current.srcObject = null
+        }
+
         sock.current.close()
-        // if (channel && channel.channel) {
-        //     setCurrentChannel(channel);
-        // }
+        sock.current = null;
+
     };
 
     return (
