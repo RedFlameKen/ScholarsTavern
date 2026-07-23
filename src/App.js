@@ -15,7 +15,7 @@ import CallProvider from "./call/CallProvider";
 function App() {
     return (
         <CallProvider>
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.NODE_ENV === "production" ? "/ScholarsTavern" : ""}>
                 <Routes>
                     <Route path="/" element={<LandingPage />} />
                     <Route path="/home" element={<HomePage />} />
