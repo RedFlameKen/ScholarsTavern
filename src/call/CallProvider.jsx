@@ -287,8 +287,7 @@ function CallProvider({ children }) {
         peers.current.clear();
 
         if (previewStreamRef.current) {
-            previewStreamRef.current.getVideoTracks().forEach(track => track.stop())
-            previewStreamRef.current.getAudioTracks().forEach(track => track.stop())
+            previewStreamRef.current.getTracks().forEach(track => track.stop())
             previewStreamRef.current = null
         }
 
