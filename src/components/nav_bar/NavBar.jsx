@@ -4,6 +4,7 @@ import groupsIcon from "../../assets/icons/Groups.svg";
 import searchIcon from "../../assets/icons/GroupSearch.svg";
 import pendingIcon from "../../assets/icons/Pending.svg";
 import accountIcon from "../../assets/icons/Account.svg";
+import requestsIcon from "../../assets/icons/GroupRequest.svg";
 import "../../styles/ColorPalette.css";
 import "./NavBar.css";
 
@@ -34,6 +35,14 @@ function NavBar() {
                     onClick={() => navigate("/search")}
                 >
                     <img src={searchIcon} alt="Search" />
+                </button>
+
+                <button 
+                    className={`nav_icon ${isActive("/requests") ? "nav_icon--active" : ""}`} 
+                    aria-label="Requests"
+                    onClick={() => navigate("/requests")}
+                >
+                    <img src={requestsIcon} alt="Requests" />
                 </button>
             </nav>
 
