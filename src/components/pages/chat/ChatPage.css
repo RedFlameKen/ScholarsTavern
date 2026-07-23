@@ -310,6 +310,47 @@
     font-weight: bold;
 }
 
+.voice-view {
+    flex: 1;
+    display: grid;
+}
+
+.join-call-view {
+    font-family: "Cinzel Decorative", cursive, serif;
+    display: grid;
+    align-items: center;
+    margin: auto;
+}
+
+.join-grid-box {
+    margin: auto;
+}
+
+.join-call-title {
+    margin: auto;
+}
+
+/* .join-call-subtitle { */
+/*     margin: auto; */
+/* } */
+
+.join-call-join-button {
+    margin: auto;
+    width: 84px;
+    height: 44px;
+    border-radius: 12px;
+    background-color: #ad744a;
+    color: #ffffff;
+}
+
+.join-call-join-button:hover {
+    filter: brightness(1.2);
+    cursor: pointer;
+}
+.join-call-join-button:active {
+    filter: brightness(0.8);
+}
+
 .voice-grid {
     flex: 1;
     display: grid;

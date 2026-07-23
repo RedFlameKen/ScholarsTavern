@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import VideoIcon from "../../../assets/icons/Video.svg"
 import VideoOffIcon from "../../../assets/icons/VideoDisabled.svg"
 import HeadphonesIcon from "../../../assets/icons/Headphones.svg"
@@ -8,7 +8,7 @@ import MicOffIcon from "../../../assets/icons/MicDisabled.svg"
 import CallEndIcon from "../../../assets/icons/CallEnd.svg"
 import { useCall as UseCall } from "../../../call/CallProvider";
 
-function CallView({ channel }) {
+function CallView({ channel, group_id }) {
     const {
         peers,
         previewRef,
@@ -19,21 +19,15 @@ function CallView({ channel }) {
         isDeafened,
         toggleVideo,
         videoDisabled,
+        startCall,
         endCall,
         firstName,
         lastName,
+        connected
     } = UseCall()
 
-    // TODO: should no longer use this, start call when pressing on channel in [ChatPage]
-    // useEffect(() => {
-    //     startCall({group_id: group_id, channel: channel})
-    //     return () => {
-    //         if (sock.current) {
-    //             sock.current.close()
-    //         }
-    //     }
-    // }, [sock])
-
+    const [leftCall, setLeftCall] = useState(false)
+    
     function RemoteVideo({ stream, first_name, last_name }) {
         const ref = useRef(null)
 
@@ -104,45 +98,76 @@ function CallView({ channel }) {
                 </div>
             </div>
 
-            {/* Stream / Avatar Grid */}
-            <div className="voice-grid">
-                {createLocalVideo()}
-                {[...remoteStreams].map(([id, stream]) =>
-                    createRemoteVideo(id, stream)
-                )}
-            </div>
+            {connected ? 
+                <div className="voice-view">
 
-            {/* Controls Panel */}
-            <div className="voice-controls">
-                <button
-                    className={`control-btn circle-btn ${videoDisabled ? "active-control" : ""}`}
-                    onClick={() => {
-                        toggleVideo()
-                    }}
-                >
-                {videoDisabled ? (<img src={VideoOffIcon} alt=""/>) : (<img src={VideoIcon} alt=""/>)}
-                </button>
-                <button
-                    className={`control-btn circle-btn ${isDeafened ? "active-control" : ""}`}
-                    onClick={() => {
-                        toggleDeafened()
-                    }}
-                >
-                    <img src={isDeafened ? HeadphonesOffIcon : HeadphonesIcon} alt=""/>
-                </button>
-                <button className="control-btn hangup-btn" onClick={endCall}>
-                    <img src={CallEndIcon} alt=""/>
-                </button>
-                <button
-                    className={`control-btn circle-btn ${isMuted ? "active-control" : ""}`}
-                    onClick={() => {
-                        toggleMuted()
-                    }}
-                >
-                    <img src={isMuted ? MicOffIcon : MicIcon} alt=""/>
-                </button>
-                <button className="control-btn circle-btn">⚙️</button>
+                    {/* Stream / Avatar Grid */}
+                    <div className="voice-grid">
+                        {createLocalVideo()}
+                        {[...remoteStreams].map(([id, stream]) =>
+                            createRemoteVideo(id, stream)
+                        )}
+                    </div>
+
+                    {/* Controls Panel */}
+                    <div className="voice-controls">
+                        <button
+                            className={`control-btn circle-btn ${videoDisabled ? "active-control" : ""}`}
+                            onClick={() => {
+                                toggleVideo()
+                            }}
+                        >
+                            {videoDisabled ? (<img src={VideoOffIcon} alt="" />) : (<img src={VideoIcon} alt="" />)}
+                        </button>
+                        <button
+                            className={`control-btn circle-btn ${isDeafened ? "active-control" : ""}`}
+                            onClick={() => {
+                                toggleDeafened()
+                            }}
+                        >
+                            <img src={isDeafened ? HeadphonesOffIcon : HeadphonesIcon} alt="" />
+                        </button>
+                        <button className="control-btn hangup-btn" onClick={() => {
+                                endCall()
+                                setLeftCall(true)
+                            }}>
+                            <img src={CallEndIcon} alt="" />
+                        </button>
+                        <button
+                            className={`control-btn circle-btn ${isMuted ? "active-control" : ""}`}
+                            onClick={() => {
+                                toggleMuted()
+                            }}
+                        >
+                            <img src={isMuted ? MicOffIcon : MicIcon} alt="" />
+                        </button>
+                        <button className="control-btn circle-btn">⚙️</button>
+                    </div>
+                </div>
+                : leftCall ?
+            <div className="join-call-view">
+                <div className="join-grid-box">
+                    <h1 className="join-call-title">{channel.name}</h1>
+                </div>
+                <div className="join-grid-box">
+                    <p className="join-call-subtitle">Join the call</p>
+                </div>
+                <div className="join-grid-box">
+                    <button
+                         className="join-call-join-button"
+                        type="button"
+                        onClick={() => {
+                            startCall({ group_id: group_id, channel: channel })
+                            setLeftCall(false)
+                        }}
+                    >Join Call</button>
+                </div>
             </div>
+                : 
+                <div>
+                </div>
+
+            }
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import { createContext, useContext, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useRef, useState } from "react";
 import { checkAuth, DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../request/requester";
 
 const CallContext = createContext(null)
@@ -8,7 +8,15 @@ function CallProvider({ children }) {
     const peers = useRef(new Map())
     const previewStreamRef = useRef(null)
     // BUG: preview is black when re-entering call
-    const previewRef = useRef(null)
+    // const previewRef = useRef(null)
+    const previewRef = useCallback(node => {
+        if (!node) return;
+
+        if (previewStreamRef.current) {
+            node.srcObject = previewStreamRef.current;
+            node.play().catch(() => {});
+        }
+    }, []);
     const audioRef = useRef(null)
     const videoRef = useRef(null)
     const cur_user_id = useRef(-1)
@@ -22,7 +30,7 @@ function CallProvider({ children }) {
     const [videoDisabled, setVideoDisabled] = useState(true);
 
     const [firstName, setFirstName] = useState("User")
-    const [lastName, setLastName] = useState("User")
+    const [lastName, setLastName] = useState("")
 
     function toggleDeafened() {
         setIsDeafened(!isDeafened)
@@ -77,7 +85,6 @@ function CallProvider({ children }) {
                 });
             }
 
-            console.log(`adding remote stream of ${user}`)
             setRemoteStreams(prev => {
                 const next = new Map(prev)
                 next.set(user.id, stream)
@@ -216,7 +223,19 @@ function CallProvider({ children }) {
         }
     }
 
+    function initializeStates(){
+        setRemoteStreams(new Map())
+        setCurrentCall(null)
+        setConnected(false)
+        setIsMuted(false)
+        setIsDeafened(false)
+        setVideoDisabled(true)
+        setFirstName("User")
+        setLastName("")
+    }
+
     async function startCall({ group_id, channel }) {
+        initializeStates()
         const result = await checkAuth({})
         if (!result.success)
             return

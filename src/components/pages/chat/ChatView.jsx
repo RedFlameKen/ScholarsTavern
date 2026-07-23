@@ -52,6 +52,9 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
     }, [chats])
 
     useEffect(() => {
+        if (channel.id === -1) {
+            return
+        }
         chatSocket.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/chat/${channel.id}`);
 
         chatSocket.current.onmessage = async (ev) => {
