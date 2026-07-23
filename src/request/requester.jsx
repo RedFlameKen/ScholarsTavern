@@ -32,13 +32,11 @@ export function GET({
     on_finish=(/** @type {ResponseData} */ _) => {},
     on_error=(/** @type {any} */ _) => {}
 }) {
-    console.log("executed GET")
     fetch(HTTP_PROTOCOL+domain+endpoint+"?"+new URLSearchParams(request_params), 
         { 
             method: "GET",
             credentials: "include",
         }).then(async (response) => {
-            console.log("sent get request!")
             let body = await response.json()
             if (!body){
                 on_finish(new ResponseData())
@@ -50,7 +48,6 @@ export function GET({
             let data = body.data
             on_finish(new ResponseData(status, success, message, data))
         }).catch((reason) => {
-            console.log(reason)
             on_error(reason)
         })
 }
@@ -89,7 +86,6 @@ export async function POST({
         }).then(async (response) => {
             let body
             let content_type = response.headers.get("content-type")
-            console.log(content_type)
             if (content_type === "application/json")
                 body = await response.json()
             else {
@@ -118,7 +114,6 @@ export async function POST({
 export async function checkAuth({
     domain=DEFAULT_SERVER_DOMAIN,
 }) {
-    console.log("executed GET")
     const response = await fetch(HTTP_PROTOCOL+domain+"/auth", 
         { 
             method: "GET",
