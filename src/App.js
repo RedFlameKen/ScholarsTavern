@@ -8,23 +8,26 @@ import LoginPage from './components/pages/login/LoginPage';
 import SignupPage from './components/pages/signup/SignupPage';
 import LandingPage from "./components/pages/landing_page/LandingPage";
 import SearchPage from "./components/pages/search/SearchPage";
+import CallProvider from "./call/CallProvider";
 
 function App() {
-  return (
-      <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/search" element={<SearchPage />} />
-            <Route path="/chat/:group_id" element={<ChatPage />} />
-            <Route path="/call" element={<CallPage />} />
-            <Route path="/profile" element={<AccountProfilePage />} />
-            <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        
-        </Routes>
-      </BrowserRouter>
-  );
+    return (
+        <CallProvider>
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/" element={<LandingPage />} />
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/search" element={<SearchPage />} />
+                    <Route path="/chat/:group_id" element={<ChatPage />} />
+                    <Route path="/call" element={<CallPage />} />
+                    <Route path="/profile" element={<AccountProfilePage />} />
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+
+                </Routes>
+            </BrowserRouter>
+        </CallProvider>
+    );
 }
 
 export default App;

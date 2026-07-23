@@ -8,6 +8,7 @@ import voiceIcon from "../../../assets/icons/Voice.svg";
 import tagIcon from "../../../assets/icons/Tag.svg";
 import ChatView from "./ChatView";
 import CallView from "./CallView";
+import { useCall as UseCall } from "../../../call/CallProvider";
 
 const ChannelType = {
     CHAT: "chat",
@@ -19,10 +20,33 @@ function ChatPage() {
     const [groupName, setGroupName] = useState("");
     const [channels, setChannels] = useState([]);
     const socket = useRef(null)
+    const { startCall, currentCall, endCall } = UseCall()
 
     const cur_user_id = useRef(-1);
 
-    const [activeChannel, setActiveChannel] = useState({ id: 0, name: "", type: "chat" });
+    const [activeChannel, setActiveChannel] = useState({ id: -1, name: "", type: "chat" });
+
+    function setCurrentChannel(channel) {
+        if (currentCall){
+            if (currentCall.id === channel.id &&
+                currentCall.type === channel.type) {
+                return
+            }
+            if (currentCall) {
+                endCall()
+            }
+        }
+        setActiveChannel(channel);
+
+        switch (channel.type) {
+            case ChannelType.CHAT:
+                break;
+            default:
+            case ChannelType.VOICE:
+                startCall({group_id: group_id, channel: channel})
+                break;
+        }
+    }
 
     useEffect(() => {
         async function initUserId() {
@@ -53,23 +77,12 @@ function ChatPage() {
                 setChannels(newChannels);
 
                 if (newChannels[0] && newChannels[0].channels[0]) {
-                    setCurrentChannel(newChannels[0].channels[0]);
+                    setActiveChannel(newChannels[0].channels[0]);
                 }
             }
         });
 
     }, [group_id]);
-
-    function setCurrentChannel(channel) {
-        setActiveChannel(channel);
-        // switch (channel.type) {
-        //     case ChannelType.CHAT:
-        //         break;
-        //     default:
-        //     case ChannelType.VOICE:
-        //         break;
-        // }
-    }
 
     function createChannelItemIcon(type) {
         let icon;
