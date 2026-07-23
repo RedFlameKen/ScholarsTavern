@@ -6,7 +6,7 @@ import SearchIcon from "../../../assets/icons/Search.svg";
 import PrivateIcon from "../../../assets/icons/Private.svg";
 import PublicIcon from "../../../assets/icons/Public.svg";
 // import NoProfilePicture from "../../../assets/icons/Account.svg";
-import { GET } from "../../../request/requester";
+import { GET, POST } from "../../../request/requester";
 import { useSearchParams } from "react-router-dom";
 
 function SearchPage() {
@@ -44,7 +44,36 @@ function SearchPage() {
     }, [searchParams])
     
     const handleJoinGroup = (group) => {
-        alert(`You requested to join: ${group.name}`);
+        POST({
+            endpoint: "/group/join",
+            body: {
+                data: {
+                    group_id: group.id
+                }
+            },
+            on_finish: (response) => {
+                if (!response.success) {
+                    alert("Unable to join group");
+                }
+                setResults(prev =>
+                    prev.map(prev =>
+                        prev.id === group.id ? {
+                            ...prev,
+                            has_requested: true
+                        }
+                        : prev
+                    )
+                );
+                setSelectedGroup(prev =>
+                    prev
+                    ? {
+                        ...prev,
+                        has_requested: true
+                    }
+                    : null
+                );
+            }
+        })
         setSelectedGroup(null);
     };
     
@@ -82,7 +111,11 @@ function SearchPage() {
                         <p style={{ textAlign: "center", fontSize: "1.2rem" }}>No groups found.</p>
                     ) : (
                         filteredGroups.map(group => (
-                            <section key={group.id} className="group-card" onClick={() => setSelectedGroup(group)}> 
+                            <section key={group.id} className="group-card" onClick={() => {
+                                setSelectedGroup(group)
+                                console.log(`${selectedGroup} but ${JSON.stringify(group)}`)
+                            }
+                            }> 
                                 <div className="card-header">
                                     <h2 className="group-title">{group.name}</h2>
                                     <span className="visibility-icon" title={group.is_public ? "Public" : "Private"}>
@@ -152,10 +185,16 @@ function SearchPage() {
                         </div>
 
                         <button 
-                            className="popup-join-btn" 
+                            className={`popup-join-btn ${
+                                selectedGroup.is_member ||
+                                selectedGroup.has_requested ? "popup-join-btn-disabled" : ""}`}
+                            disabled={selectedGroup.is_member || selectedGroup.has_requested}
                             onClick={() => handleJoinGroup(selectedGroup)}
                         >
-                            Join Group | {selectedGroup.name}
+                            {selectedGroup.is_member ? "Already Joined" :
+                                selectedGroup.has_requested ? "Request Pending" :
+                                "Join Group"
+                            }
                         </button>
 
                         <button 

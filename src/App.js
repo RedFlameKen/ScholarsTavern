@@ -9,6 +9,7 @@ import SignupPage from './components/pages/signup/SignupPage';
 import LandingPage from "./components/pages/landing_page/LandingPage";
 import SearchPage from "./components/pages/search/SearchPage";
 import RequestPage from './components/pages/RequestPage/RequestPage';
+import PendingPage from './components/pages/pending/PendingPage';
 import CallProvider from "./call/CallProvider";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
                     <Route path="/requests" element={<RequestPage />} />
+                    <Route path="/pending" element={<PendingPage />} />
                 </Routes>
             </BrowserRouter>
         </CallProvider>

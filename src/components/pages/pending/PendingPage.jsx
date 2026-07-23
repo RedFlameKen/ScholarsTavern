@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import NavBar from "../../nav_bar/NavBar";
-import "./RequestPage.css";
-import Check from "../../../assets/icons/Check.svg"
+import "./PendingPage.css";
 import Close from "../../../assets/icons/Close.svg"
 import { GET, POST } from "../../../request/requester";
 
@@ -10,7 +9,7 @@ function RequestPage() {
 
     useEffect(() => {
         GET({
-            endpoint: "/group/request",
+            endpoint: "/group/pending",
             on_finish: (response) => {
                 if (!response.success) {
                     return
@@ -23,43 +22,24 @@ function RequestPage() {
         })
     }, [])
 
-    const handleAccept = (request) => {
+    const handleCancel = (request) => {
+        console.log(request)
         POST({
-            endpoint: "/group/request/approve",
+            endpoint: "/group/pending/cancel",
             body: {
                 data: {
                     group_id: request.group_id,
-                    requester_id: request.requester.id
                 }
             },
             on_finish: (response) => {
                 if (!response.success) {
-                    alert("unable to accept the request");
+                    alert("unable to cancel the request");
                     return
                 }
                 setRequests((prev) => prev.filter((item) => item.id !== request.id));
-                alert(`Accepted request #${request.id}`);
+                alert(`Canceled request #${request.id}`);
             }
-        })
-    };
 
-    const handleReject = (request) => {
-        POST({
-            endpoint: "/group/request/reject",
-            body: {
-                data: {
-                    group_id: request.group_id,
-                    requester_id: request.requester.id
-                }
-            },
-            on_finish: (response) => {
-                if (!response.success) {
-                    alert("unable to reject the request");
-                    return
-                }
-                setRequests((prev) => prev.filter((item) => item.id !== request.id));
-                alert(`Rejected request #${request.id}`);
-            }
         })
     };
 
@@ -76,22 +56,12 @@ function RequestPage() {
                 <div className="request-card-content">
                     <div className="request-card-labels">
                         <h2 className="request-group-title">{request.name}</h2>
-                        <p>{`Requester: ${request.requester.first_name} ${request.requester.last_name}`}</p>
                     </div>
 
                     <div className="request-actions">
                         <button
-                            className="action-btn accept-btn"
-                            onClick={() => handleAccept(request)}
-                            title="Accept Request"
-                            aria-label="Accept Request"
-                        >
-                            <img src={Check} alt="" />
-                        </button>
-
-                        <button
                             className="action-btn reject-btn"
-                            onClick={() => handleReject(request)}
+                            onClick={() => handleCancel(request)}
                             title="Reject Request"
                             aria-label="Reject Request"
                         >

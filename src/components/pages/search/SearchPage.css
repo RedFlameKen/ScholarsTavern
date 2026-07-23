@@ -295,25 +295,32 @@ body {
 /*Join Button*/
 .popup-join-btn {
   width: 100%;
-  background-color: #d1d5db;
+  background-color: #388e3c;
   border: none;
   border-radius: 14px;
   padding: 14px 20px;
   font-family: 'Montserrat', sans-serif;
   font-size: 1.25rem;
   font-weight: 500;
-  color: #000000;
+  color: #ffffff;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
   margin-bottom: 25px;
 }
 
+.popup-join-btn-disabled {
+  background-color: #c4c8cc;
+  color: #000000;
+}
+
 .popup-join-btn:hover {
   background-color: #c4c8cc;
+  filter: brightness(1.2);
 }
 
 .popup-join-btn:active {
   transform: scale(0.98);
+  filter: brightness(0.8);
 }
 
 /*Not Joining Button*/
