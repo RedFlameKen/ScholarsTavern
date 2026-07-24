@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import logo from "../../logo.svg";
+import logo from "../../logo.png";
 import groupsIcon from "../../assets/icons/Groups.svg";
 import searchIcon from "../../assets/icons/GroupSearch.svg";
 import pendingIcon from "../../assets/icons/Pending.svg";

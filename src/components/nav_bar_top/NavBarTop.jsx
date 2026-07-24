@@ -1,4 +1,4 @@
-import logo from "../../logo.svg";
+import logo from "../../logo.png";
 import "../../styles/ColorPalette.css";
 import "./NavBarTop.css";
 
