@@ -181,7 +181,7 @@ function SearchPage() {
 
                         <div className="popup-member-count">
                             <span className="popup-member-dot"></span>
-                            <span className="popup-member-text">7 Group Members</span>
+                            <span className="popup-member-text">{selectedGroup.members.length} Group Members</span>
                         </div>
 
                         <button 
