@@ -80,7 +80,7 @@ function RequestPage() {
             <main className="requests-main">
                 <header className="header">
                     <div>
-                        <h1>Group Requests</h1>
+                        <h1>Pending Requests</h1>
                     </div>
                 </header>
                 <section className="requests-list">
