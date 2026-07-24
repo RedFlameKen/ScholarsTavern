@@ -9,13 +9,26 @@ const ChannelType = {
 function ChatView({ cur_user_id, channel, chatSocket }) {
     const [chats, setChats] = useState([]);
     const [inputMessage, setInputMessage] = useState("");
-    const messagesRef = useRef(null)
-    const scrollRef = useRef(null)
-    const initialLoadRef = useRef(true)
+    const messagesRef = useRef(null);
+    const scrollRef = useRef(null);
+
+    
+    const channelRef = useRef(channel);
+
+    
+    useEffect(() => {
+        channelRef.current = channel;
+    }, [channel]);
 
     const handleSendMessage = (e) => {
         e.preventDefault();
         if (!inputMessage.trim()) return;
+
+        
+        if (!chatSocket.current || chatSocket.current.readyState !== WebSocket.OPEN) {
+            console.warn("Unable to send message: WebSocket connection is not open yet.");
+            return;
+        }
 
         chatSocket.current.send(JSON.stringify({
             type: "message_sent",
@@ -29,68 +42,77 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
         setInputMessage("");
     };
 
+   
     useEffect(() => {
-        if (initialLoadRef.current) {
-            initialLoadRef.current = false
-            if (scrollRef.current) {
-                scrollRef.current.scrollIntoView()
-            }
-            return
-        }
         const container = messagesRef.current;
+        if (!container) return;
 
-        const isNearBottom =
-            container.scrollHeight -
-            container.scrollTop -
-            container.clientHeight < 100;
+        
+        requestAnimationFrame(() => {
+            const isNearBottom =
+                container.scrollHeight -
+                container.scrollTop -
+                container.clientHeight < 150;
 
-        if (isNearBottom) {
-            if (scrollRef.current) {
-                scrollRef.current.scrollIntoView({ behavior: "smooth" })
+            if (isNearBottom && scrollRef.current) {
+                scrollRef.current.scrollIntoView({ behavior: "smooth" });
             }
-        }
-    }, [chats])
+        });
+    }, [chats]);
 
+    
     useEffect(() => {
-        if (channel.id === -1) {
-            return
-        }
-        chatSocket.current = new WebSocket(`${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/chat/${channel.id}`);
+        if (channel.id === -1) return;
 
-        chatSocket.current.onmessage = async (ev) => {
-            if (ev.data === null) return;
+        const wsUrl = `${WEBSOCKET_PROTOCOL}${DEFAULT_SERVER_DOMAIN}/chat/${channel.id}`;
+        const socketInstance = new WebSocket(wsUrl);
+        chatSocket.current = socketInstance;
 
-            const data = JSON.parse(ev.data);
+        socketInstance.onmessage = async (ev) => {
+            if (!ev.data) return;
 
-            switch (data.type) {
-                case "load_chats":
-                    if (channel.type !== ChannelType.CHAT) break;
-                    setChats(data.chats)
-                    initialLoadRef.current = true
-                    break;
-                case "message_sent":
-                    if (channel.type !== ChannelType.CHAT) break;
-                    setChats(prev => [
-                        ...prev, data.data
-                    ])
-                    break;
-                default:
-                    break;
+            try {
+                const data = JSON.parse(ev.data);
+
+                
+                if (channelRef.current.type !== ChannelType.CHAT) return;
+
+                switch (data.type) {
+                    case "load_chats":
+                        setChats(data.chats);
+                        
+                        requestAnimationFrame(() => {
+                            if (scrollRef.current) scrollRef.current.scrollIntoView();
+                        });
+                        break;
+                    case "message_sent":
+                        setChats(prev => [...prev, data.data]);
+                        break;
+                    default:
+                        break;
+                }
+            } catch (err) {
+                console.error("Failed to process message payload package:", err);
             }
         };
 
+        
         setChats([]);
 
         return () => {
-            if (chatSocket.current) {
-                chatSocket.current.close()
+            if (socketInstance.readyState === WebSocket.OPEN || socketInstance.readyState === WebSocket.CONNECTING) {
+                socketInstance.close();
             }
-        }
-    }, [channel.id, channel.type, chatSocket])
+            if (chatSocket.current === socketInstance) {
+                chatSocket.current = null;
+            }
+        };
+    }, [channel.id, chatSocket]);
 
     function createMessageBubble(chat) {
+        const isOwnMessage = chat.sender_id === cur_user_id.current;
         return (
-            <div key={chat.id} className={`${chat.sender_id == cur_user_id.current ? "own-message-bubble" : "message-bubble "}`}>
+            <div key={chat.id} className={isOwnMessage ? "own-message-bubble" : "message-bubble"}>
                 <div className="message-meta">
                     <span className="message-sender">{chat.sender}</span>
                     <span className="message-time">
@@ -106,20 +128,16 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
     }
 
     return (
-        /* --- 2. TEXT CHAT VIEW --- */
         <>
             <div className="chat-room-header">
                 <h2>{channel.name}</h2>
             </div>
 
             <div ref={messagesRef} className="messages-log">
-                {chats.map((msg) => (
-                    createMessageBubble(msg)
-                ))}
+                {chats.map((msg) => createMessageBubble(msg))}
                 <div ref={scrollRef} />
             </div>
 
-            {/* Message Input Box */}
             <form className="chat-input-area" onSubmit={handleSendMessage}>
                 <input
                     type="text"
@@ -131,7 +149,7 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
                 <button type="submit" className="chat-send-btn">Send</button>
             </form>
         </>
-    )
+    );
 }
 
 export default ChatView;

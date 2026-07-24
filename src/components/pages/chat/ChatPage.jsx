@@ -19,44 +19,63 @@ function ChatPage() {
     const { group_id } = useParams();
     const [groupName, setGroupName] = useState("");
     const [channels, setChannels] = useState([]);
-    const socket = useRef(null)
-    const { startCall, currentCall, endCall } = UseCall()
 
+    // Independent socket refs prevent connection race conditions between views
+    const chatSocket = useRef(null);
+    const voiceSocket = useRef(null);
+
+    const { startCall, currentCall, endCall } = UseCall();
     const cur_user_id = useRef(-1);
 
     const [activeChannel, setActiveChannel] = useState({ id: -1, name: "", type: "chat" });
 
+    // NEW: Mobile UI sidebar drawer tracking flag
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
     function setCurrentChannel(channel) {
-        if (currentCall){
-            if (currentCall.id === channel.id &&
-                currentCall.type === channel.type) {
-                return
+        if (currentCall) {
+            if (currentCall.id === channel.id && currentCall.type === channel.type) {
+                // Close sidebar on mobile even if selecting the already active channel
+                setIsSidebarOpen(false);
+                return;
             }
-            if (currentCall) {
-                endCall()
-            }
+            endCall();
         }
+
         setActiveChannel(channel);
+        // Automatically hide the side menu drawer on smaller device profiles once an option is selected
+        setIsSidebarOpen(false);
 
         switch (channel.type) {
             case ChannelType.CHAT:
                 break;
             default:
             case ChannelType.VOICE:
-                startCall({group_id: group_id, channel: channel})
+                startCall({ group_id: group_id, channel: channel });
                 break;
         }
     }
 
+    // 1. Authentication hook: Runs exactly once on component mount
     useEffect(() => {
         async function initUserId() {
-            const result = await checkAuth({});
-            if (!result.success) return;
-            cur_user_id.current = parseInt(result.data.user_id);
+            try {
+                const result = await checkAuth({});
+                if (!result || !result.success) {
+                    console.warn("User authentication failed or returned unsuccessful.");
+                    return;
+                }
+                cur_user_id.current = parseInt(result.data.user_id);
+            } catch (error) {
+                console.error("Network connection error during checkAuth initialization:", error);
+            }
         }
 
         initUserId();
+    }, []);
 
+    // 2. Main data fetching hook: Runs when group_id updates, preventing infinite render loops
+    useEffect(() => {
         GET({
             endpoint: `/group/${group_id}`,
             on_finish: (response) => {
@@ -66,7 +85,6 @@ function ChatPage() {
                 }
 
                 setGroupName(response.data.group_name);
-
                 const channelGroups = response.data.channel_groups;
 
                 let newChannels = [];
@@ -81,21 +99,17 @@ function ChatPage() {
                 }
             }
         });
-
     }, [group_id]);
 
-    function createChannelItemIcon(type) {
-        let icon;
-        switch (type) {
-            default:
-            case ChannelType.CHAT:
-                icon = tagIcon;
-                break;
-            case ChannelType.VOICE:
-                icon = voiceIcon;
-                break;
-        }
+    // 3. Clean up active calls when user leaves the chat page entirely
+    useEffect(() => {
+        return () => {
+            endCall();
+        };
+    }, [endCall]);
 
+    function createChannelItemIcon(type) {
+        let icon = type === ChannelType.VOICE ? voiceIcon : tagIcon;
         return (
             <div className="channel-item-icon">
                 <img src={icon} alt="" />
@@ -104,11 +118,11 @@ function ChatPage() {
     }
 
     function createChannelItem(channel) {
+        const isActive = activeChannel.id === channel.id && activeChannel.type === channel.type;
         return (
             <div
                 key={channel.id}
-                className={`channel-item ${activeChannel.id === channel.id &&
-                    activeChannel.type === channel.type ? "active" : ""}`}
+                className={`channel-item ${isActive ? "active" : ""}`}
                 onClick={() => setCurrentChannel(channel)}
             >
                 {createChannelItemIcon(channel.type)}
@@ -120,45 +134,53 @@ function ChatPage() {
     function createChannelGroup(channelGroup) {
         return (
             <div key={channelGroup.id} className="channel-group-wrapper">
-                <div className={`channel-group`}>
+                <div className="channel-group">
                     {channelGroup.name}
                 </div>
-                {channelGroup.channels.map(channel => (
-                    createChannelItem(channel)
-                ))}
+                {channelGroup.channels.map(channel => createChannelItem(channel))}
             </div>
         );
     }
 
     return (
-        <div id="chat_page">
+        // Dynamic template literal class handles injected viewport state cleanly for styling logic
+        <div id="chat_page" className={isSidebarOpen ? "sidebar-mobile-visible" : "sidebar-mobile-hidden"}>
             <NavBar />
 
-            {/* Sidebar: Tavern Channels */}
+            {/* Mobile Menu Action Toggle Button Overlay */}
+            <button
+                type="button"
+                className="mobile-menu-toggle"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                aria-label="Toggle channels navigation drawer menu"
+            >
+                {isSidebarOpen ? "✕" : "☰"}
+            </button>
+
+            {/* Sidebar View Pane */}
             <div id="channels_section">
                 <h3 className="channels-header">{groupName}</h3>
                 <div className="channels-list">
-                    {channels.map((channel) => (
-                        createChannelGroup(channel)
-                    ))}
+                    {channels.map((channel) => createChannelGroup(channel))}
                 </div>
             </div>
 
-            {/* Main Area Content Panel */}
+            {/* Main Center Content Grid Display Panel */}
             <div id="main_section">
-                {activeChannel.type === ChannelType.VOICE ? 
-                    <CallView 
+                {activeChannel.type === ChannelType.VOICE ? (
+                    <CallView
                         group_id={group_id}
                         cur_user_id={cur_user_id}
                         channel={activeChannel}
-                        sock={socket}
-                    /> :
+                        sock={voiceSocket}
+                    />
+                ) : (
                     <ChatView
                         cur_user_id={cur_user_id}
                         channel={activeChannel}
-                        chatSocket={socket}
+                        chatSocket={chatSocket}
                     />
-                }
+                )}
             </div>
         </div>
     );

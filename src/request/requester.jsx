@@ -9,12 +9,18 @@ class ResponseData {
     message = ""
     data = {}
 
-    constructor(status, success, message, data){
+    /**
+     * @param {number} [status]
+     * @param {boolean} [success]
+     * @param {string} [message]
+     * @param {Record<string, any> | string} [data]
+     */
+    constructor(status = 0, success = false, message = "", data = {}) {
         this.status = status
         this.success = success
         this.message = message
         this.data = data
-    }
+    } // <-- Make sure this closes the constructor
 }
 
 /** 
@@ -56,7 +62,7 @@ export function GET({
     * @param {Object} options
     * @param {string} options.domain
     * @param {string} options.endpoint
-    * @param {string | Map} options.body
+    * @param {string | Map<string, any>} options.body  
     * @param {Record<string, any>} options.request_params
     * @param {string} options.content_type
     * @param {(_: ResponseData) => void} options.on_finish
@@ -114,11 +120,26 @@ export async function POST({
 export async function checkAuth({
     domain=DEFAULT_SERVER_DOMAIN,
 }) {
-    const response = await fetch(HTTP_PROTOCOL+domain+"/auth", 
-        { 
-            method: "GET",
-            credentials: "include",
-        })
-    const result = await response.json()
-    return result;
+    try {
+        const response = await fetch(HTTP_PROTOCOL + domain + "/auth",
+            {
+                method: "GET",
+                credentials: "include",
+            });
+
+        const result = await response.json();
+        return result;
+    }  catch (error) {
+        console.error("Authentication service unreachable:", error);
+
+        // Safely extract the message string whether it's an Error instance or something else
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        return {
+            success: false,
+            data: null,
+            error: errorMessage
+        };
+    
+    }
 }
