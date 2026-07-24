@@ -115,7 +115,7 @@ function RequestPage() {
                 </header>
                 <section className="requests-list">
                     {requests.length === 0 ? (
-                        <p className="no-requests-msg">No pending requests.</p>
+                        <p className="no-requests-msg">No join requests yet.</p>
                     ) : (
                         requests.map((request) => (
                             <RequestItem key={request.id} request={request}/>
