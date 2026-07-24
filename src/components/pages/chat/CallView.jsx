@@ -94,7 +94,7 @@ function CallView({ channel, group_id }) {
                         <span className="avatar-dot dot-2"></span>
                         <span className="avatar-dot dot-3"></span>
                     </div>
-                    <span className="participant-count">6</span>
+                    <span className="participant-count">{[...remoteStreams].length + (connected ? 1 : 0)}</span>
                 </div>
             </div>
 
