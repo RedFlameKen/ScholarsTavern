@@ -54,6 +54,20 @@ function AccountProfilePage() {
         setIsEditModalOpen(false);
     };
 
+    function handleLogout() {
+        GET({
+            endpoint: "/logout",
+            on_finish: (response) => {
+                if (!response.success) {
+                    return
+                }
+                navigate("/")
+            },
+            on_error: (_) => {
+            }
+        })
+    }
+
     const saveAbout = () => {
         POST({
             endpoint: "/user/update",
@@ -109,7 +123,7 @@ function AccountProfilePage() {
                         </p>
                         <p
                             id="account_logout_text"
-                            onClick={() => navigate("/")}
+                            onClick={() => {handleLogout()}}
                         >
                             Logout
                         </p>
