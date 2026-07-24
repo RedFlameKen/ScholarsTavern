@@ -61,6 +61,7 @@ function ChatPage() {
             if (currentCall.id === channel.id && currentCall.type === channel.type) return;
             if (currentCall) endCall();
         }
+
         setActiveChannel(channel);
         setIsSidebarOpen(false); // Close sidebar drawer layout automatically on choice (mobile convenience)
 
@@ -69,14 +70,25 @@ function ChatPage() {
         }
     }
 
+    // 1. Authentication hook: Runs exactly once on component mount
     useEffect(() => {
         async function initUserId() {
-            const result = await checkAuth({});
-            if (!result.success) return;
-            cur_user_id.current = parseInt(result.data.user_id);
+            try {
+                const result = await checkAuth({});
+                if (!result || !result.success) {
+                    console.warn("User authentication failed or returned unsuccessful.");
+                    return;
+                }
+                cur_user_id.current = parseInt(result.data.user_id);
+            } catch (error) {
+                console.error("Network connection error during checkAuth initialization:", error);
+            }
         }
         initUserId();
+    }, []);
 
+    // 2. Main data fetching hook: Runs when group_id updates, preventing infinite render loops
+    useEffect(() => {
         GET({
             endpoint: `/group/${group_id}`,
             on_finish: (response) => {
@@ -115,6 +127,7 @@ function ChatPage() {
     }
 
     function createChannelItem(channel) {
+        const isActive = activeChannel.id === channel.id && activeChannel.type === channel.type;
         return (
             <div
                 key={channel.id}
