@@ -21,6 +21,7 @@ function ChatPage() {
     const [channels, setChannels] = useState([]);
     const socket = useRef(null)
     const { startCall, currentCall, endCall } = UseCall()
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const cur_user_id = useRef(-1);
 
@@ -131,8 +132,17 @@ function ChatPage() {
     }
 
     return (
-        <div id="chat_page">
+        <div id="chat_page" className={isSidebarOpen ? "sidebar-mobile-visible" : "sidebar-mobile-hidden"}>
             <NavBar />
+
+            <button
+                type="button"
+                className="mobile-menu-toggle"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                aria-label="Toggle channels navigation drawer menu"
+            >
+                {isSidebarOpen ? "✕" : "☰"}
+            </button>
 
             {/* Sidebar: Tavern Channels */}
             <div id="channels_section">

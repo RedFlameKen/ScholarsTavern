@@ -5,6 +5,8 @@
     flex-direction: row;
     font-family: Arial, Helvetica, sans-serif;
     box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
 }
 
 /* --- CHANNELS SIDEBAR SECTION --- */
@@ -18,6 +20,8 @@
     border-radius: 12px;
     padding: 15px 10px;
     box-sizing: border-box;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 10;
 }
 
 .channels-header {
@@ -76,7 +80,6 @@
     width: 100%;
     height: 100%;
     filter: invert(1);
-    /* Inverts icon paths to make them white/light */
 }
 
 .channel-item-label {
@@ -107,7 +110,8 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    width: 75%;
+    flex: 1;
+    /* Automatically consumes all remaining layout row real estate */
     margin: 5px;
     background-color: #dbc6b0;
     border: 1px solid var(--st-text-color);
@@ -248,7 +252,7 @@
 
 .voice-call-header {
     background-color: #ad744a;
-    /* Warm brown top banner */
+    
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
@@ -330,10 +334,6 @@
     margin: auto;
 }
 
-/* .join-call-subtitle { */
-/*     margin: auto; */
-/* } */
-
 .join-call-join-button {
     margin: auto;
     width: 84px;
@@ -341,12 +341,14 @@
     border-radius: 12px;
     background-color: #ad744a;
     color: #ffffff;
+    border: none;
 }
 
 .join-call-join-button:hover {
     filter: brightness(1.2);
     cursor: pointer;
 }
+
 .join-call-join-button:active {
     filter: brightness(0.8);
 }
@@ -370,7 +372,6 @@
     flex: 1;
     overflow: hidden;
     background-color: #4a4d4f;
-    /* Dark grey video boxes */
     border-radius: 16px;
     position: relative;
     box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -380,6 +381,7 @@
     position: relative;
     width: 100%;
     height: 100%;
+    object-fit: cover;
 }
 
 .stream-video-disabled {
@@ -424,7 +426,6 @@
     height: 44px;
     border-radius: 50%;
     background-color: #bfa58a;
-    /* Darker tan controls */
     font-size: 18px;
 }
 
@@ -444,14 +445,97 @@
     background-color: #b22d2d;
     color: #ffffff;
     font-size: 20px;
-    /* transform: rotate(135deg); */
-    /* Turns the phone icon into a hangup button */
-}
-
-.hangup-btn:active {
-    transform: rotate(135deg);
 }
 
 .hangup-btn:hover {
     background-color: #912222;
 }
+
+/* --- CROSS-PLATFORM MOBILE UI MEDIA OVERRIDES --- */
+
+/* Hide absolute toggle switch button on regular computer environments */
+.mobile-menu-toggle {
+    display: none;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background-color: var(--st-bg-extra, #1a1a1a);
+    color: #ffffff;
+    border: none;
+    font-size: 20px;
+    z-index: 100;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 900px) {
+    .voice-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+
+    #channels_section {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding-top: 70px;
+        /* Provides breathing room for the floating toggle button */
+    }
+
+    /* Shift the slide-out navigation layout off-screen when hidden */
+    .sidebar-mobile-hidden #channels_section {
+        transform: translateX(-100%);
+    }
+
+    .sidebar-mobile-visible #channels_section {
+        transform: translateX(0);
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.25);
+    }
+
+    #main_section {
+        width: 100%;
+        margin: 0;
+        border-radius: 0;
+        border: none;
+    }
+
+    .chat-room-header {
+        padding-left: 70px;
+        /* Shifts header content right so the toggle button won't block it */
+    }
+
+    .voice-call-header {
+        padding-left: 70px;
+        padding-right: 15px;
+    }
+
+    .group-name {
+        font-size: 20px;
+    }
+
+    .participant-count {
+        font-size: 20px;
+    }
+
+    .voice-grid {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 10px;
+    }
+}
+
