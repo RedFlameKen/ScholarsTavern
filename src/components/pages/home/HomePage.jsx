@@ -92,9 +92,7 @@ function HomePage() {
         closeModal();
     }
 
-    // TODO: onclick, view chat view
     function createGroup(group) {
-        console.log(group)
         return (
             <div 
                 key={group.data.id}

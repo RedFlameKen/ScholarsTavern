@@ -1,7 +1,10 @@
-// @ts-check
 export const WEBSOCKET_PROTOCOL = "wss://"
 export const HTTP_PROTOCOL = "https://"
 export const DEFAULT_SERVER_DOMAIN = "scholarstavernserver.onrender.com"
+
+export function buildUrl(){
+    return HTTP_PROTOCOL + DEFAULT_SERVER_DOMAIN
+}
 
 class ResponseData {
     status = 0
@@ -72,17 +75,22 @@ export async function POST({
     on_error=(error) => {console.log(error)}
 }) {
     let body_final = body
-    if (typeof body_final !== "string")
-        body_final = JSON.stringify(body_final)
+
+    const headers = {};
+
+    if (body instanceof FormData) {
+    } else {
+        if (typeof body_final !== "string")
+            body_final = JSON.stringify(body_final)
+        headers["Content-Type"] = content_type
+    }
 
     fetch(HTTP_PROTOCOL+domain+endpoint+"?"+new URLSearchParams(request_params), 
         { 
             method: "POST",
             body: body_final,
             credentials: "include",
-            headers: { 
-                "Content-Type": content_type
-            }
+            headers: headers
         }).then(async (response) => {
             let body
             let content_type = response.headers.get("content-type")

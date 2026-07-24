@@ -23,7 +23,6 @@ function RequestPage() {
     }, [])
 
     const handleCancel = (request) => {
-        console.log(request)
         POST({
             endpoint: "/group/pending/cancel",
             body: {

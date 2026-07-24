@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../../../styles/ColorPalette.css";
 import "./AccountProfilePage.css";
 import NavBar from "../../nav_bar/NavBar";
 import editIcon from "../../../assets/icons/Edit.svg";
-import { checkAuth, GET, POST } from "../../../request/requester";
+import { buildUrl, checkAuth, GET, POST } from "../../../request/requester";
 
 function AccountProfilePage() {
     const navigate = useNavigate();
@@ -12,8 +12,9 @@ function AccountProfilePage() {
     const [aboutText, setAboutText] = useState("");
     const [username, setUsername] = useState("User");
     const [tempAboutText, setTempAboutText] = useState("");
+    const [pfpVer, setPfpVer] = useState(0)
 
-    let user_id = -1;
+    const userId = useRef(-1);
     let email = ""
 
     useEffect(() => {
@@ -22,12 +23,14 @@ function AccountProfilePage() {
             if (!auth_status.success) {
                 navigate("/login", { replace: true });
             }
-            user_id = auth_status.data.user_id
+            const user_id = auth_status.data.user_id
             if (user_id === -1) {
                 navigate(-1)
+                return
             }
+            userId.current = user_id
             GET({
-                endpoint: `/user/${user_id}`,
+                endpoint: `/user/${userId.current}`,
                 on_finish: (response) => {
                     if (!response.success) {
                         return;
@@ -88,13 +91,51 @@ function AccountProfilePage() {
         })
     };
 
+    const fileInputRef = useRef(null)
+
+    function openFilePicker() {
+        fileInputRef.current?.click()
+    }
+
+    function handleFileSelected(e) {
+        const file = e.target.files?.[0]
+        if (!file) return;
+
+        const form = new FormData()
+        form.append("profile_picture", file)
+
+        POST({
+            endpoint: "/user/pfp/update",
+            body: form,
+            on_finish: (response) => {
+                if (!response.success) {
+                    return
+                }
+                setPfpVer(v => v + 1)
+            }
+        })
+
+    }
+
     return (
         <div id="account_profile_page">
             <NavBar />
 
             <main id="account_content">
                 <div id="account_header">
-                    <div id="account_avatar" />
+                    <img 
+                        id="account_avatar" 
+                        src={`${buildUrl()}/user/pfp/${userId.current}?v=${pfpVer}`}
+                        onClick={() => openFilePicker()}
+                        alt=""
+                    />
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/"
+                        style={{display: "none"}}
+                        onChange={(e) => handleFileSelected(e)}
+                    />
                     <div>
                         <div id="account_name">{username}</div>
                     </div>
