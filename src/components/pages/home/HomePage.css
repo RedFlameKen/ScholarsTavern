@@ -2,9 +2,11 @@
 
 /*Page Layout*/
 #home_page {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
+    flex-direction: row;
     background-color: #E8CBAE;
+    overflow: hidden;
 }
 
 #home_main {
@@ -13,6 +15,9 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+
+    overflow-y: auto;
+    min-height: 0;
 }
 
 /*Header*/
