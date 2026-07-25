@@ -1,6 +1,6 @@
 #nav_bar {
     width: 140px;
-    min-height: 100vh;
+    height: 100vh;
     background-color: var(--st-secondary);
     display: flex;
     flex-direction: column;
@@ -8,6 +8,7 @@
     justify-content: flex-start;
     padding: 2rem 0.75rem;
     box-sizing: border-box;
+    overflow-y: auto;
 }
 
 #nav_brand {
