@@ -78,14 +78,14 @@ function SearchPage() {
     };
     
     return (
-        <div className="container">
+        <div id="container">
             <NavBar />
 
-            <div className="main-content-wrapper">
-                <header className="header">
-                    <h1 className="logo">Find Groups</h1>
-                    <div className="search-container">
-                        <span className="search-icon">
+            <main id="main-content-wrapper">
+                <header id="header">
+                    <h1 id="logo">Find Groups</h1>
+                    <div id="search-container">
+                        <span id="search-icon">
                             <img
                                 src={SearchIcon}
                                 alt="Search icon"
@@ -105,8 +105,8 @@ function SearchPage() {
                     </div>
                 </header>
 
-                {/*Groups Object List*/}
-                <main className="groups-list">
+                {/* Groups Object List */}
+                <div className="groups-list">
                     {filteredGroups.length === 0 ? (
                         <p style={{ textAlign: "center", fontSize: "1.2rem" }}>No groups found.</p>
                     ) : (
@@ -135,28 +135,11 @@ function SearchPage() {
                                         ))}
                                     </div>
                                 </div>
-
-                                {/* <div className="members-section"> */}
-                                {/*     <span className="members-label">Members:</span> */}
-                                {/*     <div className="avatar-group"> */}
-                                {/*         {group.members.map((avatarSrc, index) => ( */}
-                                {/*             <img */}
-                                {/*                 key={index} */}
-                                {/*                 className="avatar" */}
-                                {/*                 src={avatarSrc || NoProfilePicture} */}
-                                {/*                 alt="Member profile" */}
-                                {/*                 onError={(e) => { */}
-                                {/*                     e.target.src = NoProfilePicture; */}
-                                {/*                 }} */}
-                                {/*             /> */}
-                                {/*         ))} */}
-                                {/*     </div> */}
-                                {/* </div> */}
                             </section>
                         ))
                     )}
-                </main>
-            </div>
+                </div>
+            </main>
 
             {selectedGroup && (
                 <div 

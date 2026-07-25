@@ -1,56 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Redressed&display=swap');
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #e9cbb0;
-    font-family: 'Georgia', serif;
-    color: #333333;
+
+#container {
     height: 100vh;
+    display: flex;
+    flex-direction: row;
+    background-color: #E8CBAE;
     overflow: hidden;
 }
 
-.container {
+#main-content-wrapper {
+    flex: 1;
+    padding: 2.5rem;
     display: flex;
-    flex-direction: row;
-    width: 100vw;
-    height: 100vh;
-}
+    flex-direction: column;
+    gap: 2rem;
+    min-height: 0;
 
-.main-content-wrapper {
-    flex-grow: 1;
-    padding: 40px;
-    box-sizing: border-box;
     overflow-y: auto;
-    height: 100%;
 }
 
 /*Header*/
-.header {
+#header {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     margin-bottom: 50px;
     font-family: 'Redressed', cursive;
+    flex-wrap: wrap;
     gap: 30px;
 }
 
-.logo {
+#logo {
     font-size: 2.8rem;
     font-weight: normal;
     margin: 0;
     white-space: nowrap;
 }
 
-.search-container {
+#search-container {
     position: relative;
-    flex-grow: 0;
-    width: 100%;
-    max-width: 550px;
     display: flex;
     align-items: center;
+    flex: 1 1 300px;
 }
 
-.search-icon {
+#search-form {
+    flex: 1;
+    display: flex;
+}
+
+#search-icon {
     position: absolute;
     left: 15px;
     font-size: 1.2rem;
@@ -68,6 +67,7 @@ body {
     border-radius: 30px;
     outline: none;
     color: #4a4a4a;
+    box-sizing: border-box;
 }
 
 /*Groups*/
@@ -173,33 +173,30 @@ body {
     display: inline-block;
 }
 
-@media (max-width: 850px) {
-    .container {
-        flex-direction: column;
-    }
-    body {
-        overflow: auto;
-    }
-    .main-content-wrapper {
-        overflow-y: visible;
-        height: auto;
-        padding: 20px;
-    }
-    .header {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .logo {
-        text-align: center;
-    }
-    .group-card {
-        padding-bottom: 70px;
-    }
-    .members-section {
-        left: 30px;
-        right: auto;
-    }
-}
+/* @media (max-width: 850px) { */
+/*     #container { */
+/*         flex-direction: column; */
+/*     } */
+/*     #main-content-wrapper { */
+/*         overflow-y: visible; */
+/*         min-height: 100vh; */
+/*         padding: 20px; */
+/*     } */
+/*     #header { */
+/*         flex-direction: column; */
+/*         align-items: stretch; */
+/*     } */
+/*     #logo { */
+/*         text-align: center; */
+/*     } */
+/*     .group-card { */
+/*         padding-bottom: 70px; */
+/*     } */
+/*     .members-section { */
+/*         left: 30px; */
+/*         right: auto; */
+/*     } */
+/* } */
 
 /*Join Group Popup*/
 .modal-overlay {
