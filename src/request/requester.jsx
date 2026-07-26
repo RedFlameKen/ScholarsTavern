@@ -1,6 +1,6 @@
 export const WEBSOCKET_PROTOCOL = "wss://"
 export const HTTP_PROTOCOL = "https://"
-export const DEFAULT_SERVER_DOMAIN = "scholarstavernserver.onrender.com"
+export const DEFAULT_SERVER_DOMAIN = "scholarstavernserver-zap2.onrender.com"
 
 export function buildUrl(){
     return HTTP_PROTOCOL + DEFAULT_SERVER_DOMAIN
