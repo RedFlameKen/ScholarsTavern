@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../../../request/requester";
+import { buildUrl, DEFAULT_SERVER_DOMAIN, WEBSOCKET_PROTOCOL } from "../../../request/requester";
 
 const ChannelType = {
     CHAT: "chat",
@@ -91,17 +91,24 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
 
     function createMessageBubble(chat) {
         return (
-            <div key={chat.id} className={`${chat.sender_id == cur_user_id.current ? "own-message-bubble" : "message-bubble "}`}>
-                <div className="message-meta">
-                    <span className="message-sender">{chat.sender}</span>
-                    <span className="message-time">
-                        {new Date(chat.time).toLocaleTimeString([], {
-                            hour: "numeric",
-                            minute: "2-digit"
-                        })}
-                    </span>
+            <div className={`message-box ${chat.sender_id == cur_user_id.current ? "own-message-box" : ""}`}>
+                <img 
+                    className="chat-pfp"
+                    src={`${buildUrl()}/user/pfp/${chat.sender_id}`} 
+                    alt=""/>
+                <div key={chat.id} className={"message-bubble"}>
+                    <div className="message-meta">
+                        <span className="message-sender">{chat.sender}</span>
+                        <span className="message-time">
+                            {new Date(chat.time).toLocaleTimeString([], {
+                                hour: "numeric",
+                                minute: "2-digit"
+                            })}
+                        </span>
+                    </div>
+                    <p className="message-text">{chat.text}</p>
                 </div>
-                <p className="message-text">{chat.text}</p>
+
             </div>
         );
     }
