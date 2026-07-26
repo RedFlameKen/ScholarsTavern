@@ -9,6 +9,7 @@ import { buildUrl, checkAuth, GET, POST } from "../../../request/requester";
 function AccountProfilePage() {
     const navigate = useNavigate();
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [isPfpPromptOpen, setPfpPromptOpen] = useState(false);
     const [aboutText, setAboutText] = useState("");
     const [username, setUsername] = useState("User");
     const [tempAboutText, setTempAboutText] = useState("");
@@ -112,6 +113,7 @@ function AccountProfilePage() {
                     return
                 }
                 setPfpVer(v => v + 1)
+                setPfpPromptOpen(false)
             }
         })
 
@@ -126,7 +128,7 @@ function AccountProfilePage() {
                     <img 
                         id="account_avatar" 
                         src={`${buildUrl()}/user/pfp/${userId.current}?v=${pfpVer}`}
-                        onClick={() => openFilePicker()}
+                        onClick={() => setPfpPromptOpen(true)}
                         alt=""
                     />
                     <input
@@ -170,6 +172,25 @@ function AccountProfilePage() {
                         </p>
                     </div>
                 </div>
+
+                {isPfpPromptOpen && (
+                    <div id="edit_modal_overlay" onClick={closeEditModal}>
+                        <div id="edit_modal_content" onClick={(e) => e.stopPropagation()}>
+                            <h2 id="edit_pfp_header">Would you like to update your profile picture?</h2>
+                            <button
+                                id="edit_modal_save_btn"
+                                onClick={() => openFilePicker()}
+                            >
+                                Select File
+                            </button>
+                            <a 
+                                className="cancel_btn"
+                                onClick={() => setPfpPromptOpen(false)}>
+                                Cancel
+                            </a>
+                        </div>
+                    </div>
+                )}
 
                 {isEditModalOpen && (
                     <div id="edit_modal_overlay" onClick={closeEditModal}>
