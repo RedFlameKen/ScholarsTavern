@@ -221,6 +221,7 @@
 }
 
 .cancel_btn {
+    padding-top: 15px;
     margin: auto;
     text-align: center;
 }

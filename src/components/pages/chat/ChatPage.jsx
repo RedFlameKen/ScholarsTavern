@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import NavBar from "../../nav_bar/NavBar";
 import "../../../styles/ColorPalette.css";
 import "./ChatPage.css";
-import { useParams } from "react-router-dom";
-import { buildUrl, checkAuth, GET } from "../../../request/requester";
+import { useNavigate, useParams } from "react-router-dom";
+import { buildUrl, checkAuth, GET, POST } from "../../../request/requester";
 import voiceIcon from "../../../assets/icons/Voice.svg";
 import tagIcon from "../../../assets/icons/Tag.svg";
 import ChatView from "./ChatView";
@@ -16,6 +16,7 @@ const ChannelType = {
 };
 
 function ChatPage() {
+    const navigate = useNavigate();
     const { group_id } = useParams();
     const [groupName, setGroupName] = useState("");
     const [channels, setChannels] = useState([]);
@@ -25,17 +26,33 @@ function ChatPage() {
     // Control states for responsive slide-out menus
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Closed by default on mobile
     const [isMembersOpen, setIsMembersOpen] = useState(false); // Right side panel tracking hook
+    const [kickSubject, setKickSubject] = useState(null);
 
     const [groupMembers, setGroupMembers] = useState([]);
 
     const cur_user_id = useRef(-1);
     const [activeChannel, setActiveChannel] = useState({ id: -1, name: "", type: "chat" });
 
-    function handleKickMember(memberId, name) {
-        const confirmKick = window.confirm(`Are you sure you want to kick ${name} from the group?`);
-        if (confirmKick) {
-            console.log(`UI Trigger: Request backend to kick user ID ${memberId}`);
-        }
+    // TODO: add kick backend call
+    function handleKickMember(member) {
+        POST({
+            endpoint: "/group/kick",
+            body: {
+                data: {
+                    subject_id: member.id,
+                    group_id: group_id,
+                }
+            },
+            on_finish: (response) => {
+                if (!response.success) {
+                    console.log(`unable to kick the user ${response.message}`)
+                    return;
+                }
+
+                setGroupMembers(prev => prev.filter(m => m.id !== member.id))
+                setKickSubject(null)
+            }
+        })
     }
 
     function setCurrentChannel(channel) {
@@ -62,7 +79,10 @@ function ChatPage() {
         GET({
             endpoint: `/group/${group_id}`,
             on_finish: (response) => {
-                if (!response.success) return;
+                if (!response.success) {
+                    navigate("/home")
+                    return;
+                }
                 setGroupName(response.data.group_name);
                 const channelGroups = response.data.channel_groups;
                 let newChannels = [];
@@ -175,9 +195,11 @@ function ChatPage() {
                 <h4 className="members-header">Members — {groupMembers.length}</h4>
                 <div className="members-list">
                     {groupMembers.map((member) => (
-                        <div key={member.id} className={`member-card ${member.isOnline ? "online" : "offline"}`}>
+                        <div key={member.id} className={`member-card ${member.isOnline ? "online" : "offline"}`}
+                            onClick={() => setKickSubject(member)}
+                        >
                             <div className="member-avatar-wrapper">
-                                    <img src={`${buildUrl()}/user/pfp/${member.id}`} alt={member.name} className="member-pfp" />
+                                    <img src={`${buildUrl()}/user/pfp/${member.id}`} alt={`${member.first_name} ${member.last_name}`} className="member-pfp" />
                             </div>
                             <div className="member-details">
                                 <span className="member-name">{`${member.first_name} ${member.last_name}`}</span>
@@ -189,6 +211,26 @@ function ChatPage() {
                     ))}
                 </div>
             </div>
+
+            {kickSubject && (
+                <div id="kick_member_overlay" onClick={() => {}}>
+                    <div id="kick_member_content" onClick={(e) => e.stopPropagation()}>
+                        <h2 id="kick_pfp_header">{`Are you sure you want to kick ${kickSubject.first_name} ${kickSubject.last_name}?`}</h2>
+                        <button
+                            id="kick_member_button"
+                            onClick={() => {handleKickMember(kickSubject)}}
+                        >
+                            Kick User
+                        </button>
+                        <a 
+                            className="cancel_prompt_btn"
+                            onClick={() => setKickSubject(null)}>
+                            Cancel
+                        </a>
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }
