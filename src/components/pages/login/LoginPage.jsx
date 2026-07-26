@@ -93,20 +93,23 @@ function LoginPage() {
 
     return (
         <div id="login_page">
-            <NavBarTop buttons={[
-                (<RoundedButton 
-                    label={"Sign Up"}
-                    backgroundColor={"var(--st-bg-extra)"}
-                    color={"var(--st-bg-light)"}
-                    onClick={() => navigate("/signup")}
-                    />
-                ),
-                (<RoundedButton 
-                    label={"Login"} 
-                    onClick={() => navigate("/login")}
-                    />
-                ),
-            ]} />
+            <NavBarTop
+                buttons={[
+                    (<RoundedButton 
+                        label={"Sign Up"}
+                        backgroundColor={"var(--st-bg-extra)"}
+                        color={"var(--st-bg-light)"}
+                        onClick={() => navigate("/signup")}
+                        />
+                    ),
+                    (<RoundedButton 
+                        label={"Login"} 
+                        onClick={() => navigate("/login")}
+                        />
+                    ),
+                ]}
+                hideButtonOnMobile={1}
+            />
             <div className="login-form-wrapper">
                 <form className="parchment-login-card" onSubmit={onSubmit}>
                     <h1 className="form-title">Log in</h1>

@@ -144,20 +144,22 @@ function HomePage() {
                     </div>
                 </header>
 
-                <section id="group_cards">
-                    {/* 3. Render created group cards dynamically */}
-                    {groups.map((group) => (
-                        createGroup(group)
-                    ))}
+                <div id="group_scroll_container">
+                    <section id="group_cards">
+                        {/* 3. Render created group cards dynamically */}
+                        {groups.map((group) => (
+                            createGroup(group)
+                        ))}
 
-                    {/* The Create Group Trigger Card */}
-                    <button className="create_card" type="button" onClick={openModal}>
-                        <div className="create_card_icon">
-                            <img src={addIcon} alt="Create group" />
-                        </div>
-                        <div className="create_card_text">Create Group</div>
-                    </button>
-                </section>
+                        {/* The Create Group Trigger Card */}
+                        <button className="create_card" type="button" onClick={openModal}>
+                            <div className="create_card_icon">
+                                <img src={addIcon} alt="Create group" />
+                            </div>
+                            <div className="create_card_text">Create Group</div>
+                        </button>
+                    </section>
+                </div>
             </main>
 
             {/* Modal Layout */}

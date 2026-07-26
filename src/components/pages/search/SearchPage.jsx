@@ -106,7 +106,8 @@ function SearchPage() {
                 </header>
 
                 {/*Groups Object List*/}
-                <main className="groups-list">
+                <div id="search_scroll_container">
+                    <main className="groups-list">
                     {filteredGroups.length === 0 ? (
                         <p style={{ textAlign: "center", fontSize: "1.2rem" }}>No groups found.</p>
                     ) : (
@@ -155,7 +156,8 @@ function SearchPage() {
                             </section>
                         ))
                     )}
-                </main>
+                    </main>
+                </div>
             </div>
 
             {selectedGroup && (

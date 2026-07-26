@@ -93,6 +93,7 @@ function SignupPage() {
                         onClick={() => navigate("/login")}
                     />,
                 ]}
+                hideButtonOnMobile={0}
             />
             <div className="login-form-wrapper">
                 <form className="parchment-login-card" onSubmit={onSubmit}>
