@@ -20,22 +20,25 @@ function LandingPage() {
 
     return (
         <div id="landing_page">
-            <NavBarTop buttons={[
-                (<RoundedButton
-                    key="signup"
-                    label={"Sign Up"}
-                    backgroundColor={"var(--st-bg-extra)"}
-                    color={"var(--st-bg-light)"}
-                    onClick={() => navigate("/signup")}
-                />
-                ),
-                (<RoundedButton
-                    key="login"
-                    label={"Login"}
-                    onClick={() => navigate("/login")}
-                />
-                ),
-            ]} />
+            <NavBarTop
+                buttons={[
+                    (<RoundedButton
+                        key="signup"
+                        label={"Sign Up"}
+                        backgroundColor={"var(--st-bg-extra)"}
+                        color={"var(--st-bg-light)"}
+                        onClick={() => navigate("/signup")}
+                    />
+                    ),
+                    (<RoundedButton
+                        key="login"
+                        label={"Login"}
+                        onClick={() => navigate("/login")}
+                    />
+                    ),
+                ]}
+                mobileCompact={true}
+            />
 
             <div className="landing-hero-container">
                 <div className="parchment-hero-card">

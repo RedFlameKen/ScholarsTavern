@@ -18,14 +18,17 @@
     background-repeat: no-repeat;
     position: relative;
     font-family: var(--standard-text-font);
+    display: flex;
+    flex-direction: column;
 }
 
 .landing-hero-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 100px);
-    padding: 40px 20px;
+    flex: 1;
+    min-height: calc(100vh - 65px);
+    padding: 32px 16px;
     box-sizing: border-box;
 }
 
@@ -33,7 +36,7 @@
     background-color: var(--parchment-alpha);
     width: 100%;
     max-width: 700px;
-    padding: 60px 40px;
+    padding: 48px 32px;
     border-radius: 28px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
     display: flex;
@@ -46,7 +49,7 @@
 .hero-title {
     font-family: "Cinzel Decorative", cursive, serif;
     color: var(--fantasy-text-color);
-    font-size: 48px;
+    font-size: clamp(2.2rem, 4.5vw, 3rem);
     margin-top: 0;
     margin-bottom: 20px;
     font-weight: 700;
@@ -55,10 +58,10 @@
 
 .hero-subtitle {
     color: #1e1d1d;
-    font-size: 18px;
+    font-size: clamp(1rem, 2.2vw, 1.125rem);
     line-height: 1.6;
     max-width: 550px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
 }
 
 .hero-actions {
@@ -79,6 +82,7 @@
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    width: min(100%, 260px);
 }
 
 .parchment-hero-btn:hover {
@@ -89,4 +93,42 @@
 
 .parchment-hero-btn:active {
     transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+    .landing-hero-container {
+        padding: 24px 14px;
+    }
+
+    .parchment-hero-card {
+        padding: 40px 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .landing-hero-container {
+        padding: 20px 12px;
+    }
+
+    .parchment-hero-card {
+        padding: 28px 18px;
+        border-radius: 20px;
+    }
+
+    .hero-title {
+        font-size: 30px;
+        margin-bottom: 16px;
+    }
+
+    .hero-subtitle {
+        font-size: 15px;
+        line-height: 1.5;
+        margin-bottom: 24px;
+    }
+
+    .parchment-hero-btn {
+        width: 100%;
+        padding: 14px 20px;
+        font-size: 15px;
+    }
 }

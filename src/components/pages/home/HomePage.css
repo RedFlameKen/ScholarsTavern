@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Redressed&display=swap');
 
+:root {
+    --group-card-min-width: 100px;
+    --group-card-max-width: 260px;
+    --group-card-min-height: 180px;
+    --group-card-padding: 1.4rem;
+    --group-card-border-width: 1px;
+    --group-card-border-radius: 24px;
+    --group-card-gap: clamp(1rem, 2vw, 1.75rem);
+    --group-card-banner-height: 64px;
+    --group-card-banner-font: 1.4rem;
+}
+
 /*Page Layout*/
 #home_page {
     height: 100vh;
@@ -11,6 +23,8 @@
 
 #home_main {
     flex: 1;
+    min-height: 0;
+    min-width: 0;
     padding: 2.5rem;
     display: flex;
     flex-direction: column;
@@ -44,19 +58,26 @@
 /*Groups Container*/
 #group_cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, max-content));
+    grid-template-columns: repeat(auto-fit, minmax(var(--group-card-min-width), 1fr));
     justify-content: center;
-    gap: 1.5rem;
+    justify-items: center;
+    gap: var(--group-card-gap);
+    width: 100%;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-bottom: 1rem;
 }
 
 /*Create Group*/
 .create_card {
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    max-width: var(--group-card-max-width);
+    aspect-ratio: 1 / 1;
+    min-height: var(--group-card-min-height);
     background: #E8CBAE;
-    border: 2px solid rgba(76,76,76,0.22);
-    border-radius: 28px;
-    padding: 2rem;
+    border: var(--group-card-border-width) solid rgba(76,76,76,0.22);
+    border-radius: var(--group-card-border-radius);
+    padding: var(--group-card-padding);
     color: var(--st-text-color-darker);
     display: flex;
     flex-direction: column;
@@ -66,6 +87,7 @@
     gap: 1.35rem;
     box-shadow: none;
     transition: transform 0.2s ease, border-color 0.2s ease;
+    box-sizing: border-box;
 }
 
 .group_card:hover,
@@ -100,37 +122,53 @@
 
 /*Groups*/
 .group_card {
-    width: 280px;
-    height: 280px;
+    width: 100%;
+    max-width: var(--group-card-max-width);
+    aspect-ratio: 1 / 1;
+    min-height: var(--group-card-min-height);
     background: #EED7C1; 
-    border: 1px solid #4C4C4C;
-    border-radius: 28px;
+    border: var(--group-card-border-width) solid #4C4C4C;
+    border-radius: var(--group-card-border-radius);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+.group_card {
+    padding: 0;
 }
 
 .group_card_banner {
-    background-color: #5C6E75; 
-    padding: 1.2rem;
-    height: 20%;
+    width: 100%;
+    background-color: #5C6E75;
+    height: var(--group-card-banner-height);
+    min-height: var(--group-card-banner-height);
+    padding: 0 1.2rem;
+    box-sizing: border-box;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: flex-start;
+    border-top-left-radius: var(--group-card-border-radius);
+    border-top-right-radius: var(--group-card-border-radius);
 }
 
 .group_card_banner h3 {
     margin: 0;
     color: #FFFFFF;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.6rem;
+    font-size: var(--group-card-banner-font);
     font-weight: 700;
     line-height: 1.2;
+    max-width: 100%;
+    word-break: break-word;
 }
 
 .group_card_body {
     flex: 1;
     background-color: #EED7C1;
+    padding: var(--group-card-padding);
 }
 
 .group_card_footer {
@@ -159,6 +197,90 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+@media (max-width: 1024px) {
+    #group_cards {
+        grid-template-columns: 1fr;
+        gap: 1.75rem;
+    }
+
+    .create_card,
+    .group_card {
+        max-width: min(380px, 100%);
+        min-height: 200px;
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 900px) {
+    #group_cards {
+        gap: 1.35rem;
+    }
+
+    .create_card,
+    .group_card {
+        max-width: min(320px, 100%);
+        min-height: 185px;
+        padding: 1.3rem;
+    }
+}
+
+@media (max-width: 640px) {
+    #home_main {
+        padding: 1.5rem;
+    }
+
+    #group_scroll_container {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    #group_cards {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        width: 100%;
+        padding: 0;
+    }
+
+    .create_card {
+        max-width: 100%;
+        min-height: 170px;
+        padding: 1rem;
+    }
+
+    .group_card {
+        max-width: 100%;
+        min-height: 170px;
+        padding: 0;
+    }
+
+    .create_card_text {
+        font-size: 1.2rem;
+    }
+
+    .group_card_banner {
+        padding: 0 1rem;
+    }
+
+    .group_card_banner h3 {
+        font-size: 1.35rem;
+    }
+
+    .group_card_footer {
+        height: 50px;
+        padding: 0 0.9rem;
+    }
+
+    .card_visibility_icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .card_menu_btn {
+        font-size: 1.4rem;
+        padding: 0.15rem;
+    }
 }
 
 .card_menu_btn:hover {
