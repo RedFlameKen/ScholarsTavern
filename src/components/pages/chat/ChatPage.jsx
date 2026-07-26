@@ -3,7 +3,7 @@ import NavBar from "../../nav_bar/NavBar";
 import "../../../styles/ColorPalette.css";
 import "./ChatPage.css";
 import { useParams } from "react-router-dom";
-import { checkAuth, GET } from "../../../request/requester";
+import { buildUrl, checkAuth, GET } from "../../../request/requester";
 import voiceIcon from "../../../assets/icons/Voice.svg";
 import tagIcon from "../../../assets/icons/Tag.svg";
 import ChatView from "./ChatView";
@@ -26,11 +26,7 @@ function ChatPage() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Closed by default on mobile
     const [isMembersOpen, setIsMembersOpen] = useState(false); // Right side panel tracking hook
 
-    const [groupMembers, setGroupMembers] = useState([
-        { id: 1, name: "Alex Mercer", role: "Admin", isOnline: true, pfp: null },
-        { id: 2, name: "Beatrix_99", role: "Member", isOnline: true, pfp: null },
-        { id: 3, name: "CodeMonkey", role: "Member", isOnline: false, pfp: null },
-    ]);
+    const [groupMembers, setGroupMembers] = useState([]);
 
     const cur_user_id = useRef(-1);
     const [activeChannel, setActiveChannel] = useState({ id: -1, name: "", type: "chat" });
@@ -77,6 +73,11 @@ function ChatPage() {
                 if (newChannels[0] && newChannels[0].channels[0]) {
                     setActiveChannel(newChannels[0].channels[0]);
                 }
+
+                const members = response.data.members;
+
+                setGroupMembers(members)
+
             }
         });
     }, [group_id]);
@@ -176,27 +177,14 @@ function ChatPage() {
                     {groupMembers.map((member) => (
                         <div key={member.id} className={`member-card ${member.isOnline ? "online" : "offline"}`}>
                             <div className="member-avatar-wrapper">
-                                {member.pfp ? (
-                                    <img src={member.pfp} alt={member.name} className="member-pfp" />
-                                ) : (
-                                    <div className="member-pfp-placeholder">
-                                        {member.name.charAt(0).toUpperCase()}
-                                    </div>
-                                )}
-                                <span className="status-indicator"></span>
+                                    <img src={`${buildUrl()}/user/pfp/${member.id}`} alt={member.name} className="member-pfp" />
                             </div>
                             <div className="member-details">
-                                <span className="member-name">{member.name}</span>
-                                <span className="member-role">{member.role}</span>
+                                <span className="member-name">{`${member.first_name} ${member.last_name}`}</span>
+                                <span className="member-role">{member.is_moderator ?
+                                    "Admin" : "Member"
+                                }</span>
                             </div>
-                            <button
-                                type="button"
-                                className="member-kick-btn"
-                                onClick={() => handleKickMember(member.id, member.name)}
-                                title={`Kick ${member.name}`}
-                            >
-                                ✕
-                            </button>
                         </div>
                     ))}
                 </div>
