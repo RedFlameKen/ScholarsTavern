@@ -207,6 +207,11 @@ function AccountProfilePage() {
                             >
                                 Save
                             </button>
+                            <a 
+                                className="cancel_btn"
+                                onClick={() => setIsEditModalOpen(false)}>
+                                Cancel
+                            </a>
                         </div>
                     </div>
                 )}
