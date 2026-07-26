@@ -275,7 +275,6 @@
 
 .voice-call-header {
     background-color: #ad744a;
-    
     padding: 15px 30px;
     display: flex;
     justify-content: space-between;
@@ -474,14 +473,153 @@
     background-color: #912222;
 }
 
-/* --- CROSS-PLATFORM MOBILE UI MEDIA OVERRIDES --- */
+/* --- DISCORD-STYLE MEMBERS SIDEBAR SECTION --- */
+#members_section {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 160px;
+    /* Reduced fixed sizing footprint */
+    margin: 5px;
+    background-color: var(--st-primary);
+    border-radius: 12px;
+    padding: 15px 6px;
+    /* Reduced vertical footprint pad */
+    box-sizing: border-box;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-/* Hide absolute toggle switch button on regular computer environments */
+.members-header {
+    color: var(--st-text-color);
+    margin-top: 0;
+    margin-bottom: 12px;
+    padding-left: 5px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.8;
+}
+
+.members-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.member-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 6px;
+    border-radius: 6px;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.member-card:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.member-avatar-wrapper {
+    position: relative;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.member-pfp {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.member-pfp-placeholder {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--st-bg-extra, #1a1a1a);
+    color: var(--st-bg-light, #ffffff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.status-indicator {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid var(--st-primary);
+}
+
+.member-card.online .status-indicator {
+    background-color: #3ba55d;
+}
+
+.member-card.offline .status-indicator {
+    background-color: #747f8d;
+}
+
+.member-card.offline {
+    opacity: 0.6;
+}
+
+.member-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.member-name {
+    color: var(--st-text-color);
+    font-size: 13px;
+    font-weight: 500;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.member-role {
+    color: var(--st-text-color);
+    font-size: 10px;
+    opacity: 0.6;
+}
+
+.member-kick-btn {
+    background: none;
+    border: none;
+    color: #d9534f;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease, background-color 0.2s ease;
+}
+
+.member-card:hover .member-kick-btn {
+    opacity: 1;
+}
+
+.member-kick-btn:hover {
+    background-color: rgba(217, 83, 79, 0.1);
+}
+
+/* --- CROSS-PLATFORM MOBILE UI & RESPONSIVE DRAWER OVERRIDES --- */
+
 .mobile-menu-toggle {
     display: none;
     position: absolute;
     top: 15px;
-    left: 15px;
     width: 40px;
     height: 40px;
     border-radius: 8px;
@@ -496,6 +634,25 @@
     justify-content: center;
 }
 
+.left-toggle {
+    left: 15px;
+}
+
+.right-toggle {
+    right: 15px;
+}
+
+.mobile-backdrop-blur {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 9;
+}
+
 @media (max-width: 900px) {
     .voice-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -504,30 +661,10 @@
 }
 
 @media (max-width: 768px) {
-    .mobile-menu-toggle {
+
+    .mobile-menu-toggle,
+    .mobile-backdrop-blur {
         display: flex;
-    }
-
-    #channels_section {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 280px;
-        height: 100%;
-        margin: 0;
-        border-radius: 0;
-        padding-top: 70px;
-        /* Provides breathing room for the floating toggle button */
-    }
-
-    /* Shift the slide-out navigation layout off-screen when hidden */
-    .sidebar-mobile-hidden #channels_section {
-        transform: translateX(-100%);
-    }
-
-    .sidebar-mobile-visible #channels_section {
-        transform: translateX(0);
-        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.25);
     }
 
     #main_section {
@@ -539,20 +676,20 @@
 
     .chat-room-header {
         padding-left: 70px;
-        /* Shifts header content right so the toggle button won't block it */
+        padding-right: 70px;
     }
 
     .voice-call-header {
         padding-left: 70px;
-        padding-right: 15px;
+        padding-right: 70px;
     }
 
     .group-name {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .participant-count {
-        font-size: 20px;
+        font-size: 18px;
     }
 
     .voice-grid {
@@ -560,5 +697,54 @@
         padding: 15px;
         gap: 10px;
     }
-}
 
+    /* Left Drawer Slide Interactions */
+    #channels_section {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 260px;
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding-top: 70px;
+        z-index: 10;
+    }
+
+    .sidebar-mobile-hidden #channels_section {
+        transform: translateX(-100%);
+    }
+
+    .sidebar-mobile-visible #channels_section {
+        transform: translateX(0);
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Right Drawer Slide Interactions */
+    #members_section {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 200px;
+        /* Wider target boundaries for easier thumb tapping */
+        height: 100%;
+        margin: 0;
+        border-radius: 0;
+        padding-top: 70px;
+        z-index: 10;
+    }
+
+    .members-mobile-hidden #members_section {
+        transform: translateX(100%);
+    }
+
+    .members-mobile-visible #members_section {
+        transform: translateX(0);
+        box-shadow: -5px 0 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .member-kick-btn {
+        opacity: 1;
+        /* Keep kick buttons visible on mobile screens since hover is unavailable */
+    }
+}
