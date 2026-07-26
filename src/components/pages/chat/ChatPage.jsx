@@ -31,6 +31,7 @@ function ChatPage() {
     const [groupMembers, setGroupMembers] = useState([]);
 
     const cur_user_id = useRef(-1);
+    const user_is_mod = useRef(false)
     const [activeChannel, setActiveChannel] = useState({ id: -1, name: "", type: "chat" });
 
     // TODO: add kick backend call
@@ -95,6 +96,8 @@ function ChatPage() {
                 }
 
                 const members = response.data.members;
+
+                user_is_mod.current = response.data.is_moderator
 
                 setGroupMembers(members)
 
@@ -196,7 +199,12 @@ function ChatPage() {
                 <div className="members-list">
                     {groupMembers.map((member) => (
                         <div key={member.id} className={`member-card ${member.isOnline ? "online" : "offline"}`}
-                            onClick={() => setKickSubject(member)}
+                            onClick={() => {
+                                if (!user_is_mod.current) {
+                                    return
+                                }
+                                setKickSubject(member)
+                            }}
                         >
                             <div className="member-avatar-wrapper">
                                     <img src={`${buildUrl()}/user/pfp/${member.id}`} alt={`${member.first_name} ${member.last_name}`} className="member-pfp" />
