@@ -23,7 +23,8 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
                 type: "text",
                 sender: cur_user_id.current,
                 text: inputMessage,
-                chat_channel_id: channel.id
+                chat_channel_id: channel.id,
+                time_sent: new Date()
             }
         }));
         setInputMessage("");
