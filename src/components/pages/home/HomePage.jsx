@@ -113,10 +113,9 @@ function HomePage() {
                         alt={group.data.is_public}
                         className="card_visibility_icon"
                     />
-                    <button type="button" className="card_menu_btn">
-                        {/* Substitute with your menu icon/SVG or use three periods */}
-                        <span className="dots_icon">⋮</span>
-                    </button>
+                    {/* <button type="button" className="card_menu_btn"> */}
+                    {/*     <span className="dots_icon">⋮</span> */}
+                    {/* </button> */}
                 </div>
             </div>
         )
