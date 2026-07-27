@@ -154,7 +154,7 @@ function SearchPage() {
                         
                         <div className="popup-avatar-container">
                             <img 
-                                src= {PublicIcon} //tempororary photo
+                                src= {selectedGroup.is_public ? PublicIcon : PrivateIcon} //tempororary photo
                                 alt="Group Icon" 
                                 className="popup-avatar-image"
                             />

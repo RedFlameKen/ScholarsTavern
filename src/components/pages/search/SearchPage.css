@@ -244,20 +244,18 @@
 .popup-avatar-container {
   width: 120px;
   height: 120px;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   overflow: hidden;
-  background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  /* margin-bottom: 20px; */
+  /* border: 1px solid rgba(0, 0, 0, 0.1); */
 }
 
 .popup-avatar-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 
 .popup-group-name {
