@@ -339,6 +339,7 @@
 .voice-view {
     flex: 1;
     display: grid;
+    overflow-y: auto;
 }
 
 .join-call-view {
