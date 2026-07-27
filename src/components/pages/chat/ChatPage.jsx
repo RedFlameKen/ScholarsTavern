@@ -34,7 +34,6 @@ function ChatPage() {
     const user_is_mod = useRef(false)
     const [activeChannel, setActiveChannel] = useState({ id: -1, name: "", type: "chat" });
 
-    // TODO: add kick backend call
     function handleKickMember(member) {
         POST({
             endpoint: "/group/kick",
@@ -47,6 +46,7 @@ function ChatPage() {
             on_finish: (response) => {
                 if (!response.success) {
                     console.log(`unable to kick the user ${response.message}`)
+                    setKickSubject(null)
                     return;
                 }
 
@@ -200,7 +200,7 @@ function ChatPage() {
                     {groupMembers.map((member) => (
                         <div key={member.id} className={`member-card ${member.isOnline ? "online" : "offline"}`}
                             onClick={() => {
-                                if (!user_is_mod.current) {
+                                if (!user_is_mod.current || cur_user_id.current === member.id) {
                                     return
                                 }
                                 setKickSubject(member)

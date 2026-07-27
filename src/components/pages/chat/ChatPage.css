@@ -801,7 +801,7 @@
 #kick_member_button {
     width: 100%;
     padding: 0.75rem;
-    background: #C8794C;
+    background: #cc241d;
     border: none;
     border-radius: 12px;
     color: white;
@@ -811,6 +811,6 @@
     transition: background 0.2s ease;
 }
 
-#kick_member_save_btn:hover {
-    background: #B5673D;
+#kick_member_button:hover {
+    background: #fb4934;
 }
