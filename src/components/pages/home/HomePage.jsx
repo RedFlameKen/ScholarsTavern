@@ -84,6 +84,8 @@ function HomePage() {
             body: newGroup,
             on_finish: (response) => {
                 if (response.success) {
+                    const new_id = response.data.group_id
+                    newGroup.data.id = new_id
                     setGroups([...groups, newGroup]);
                 }
             },
