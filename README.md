@@ -94,3 +94,8 @@ building again:
 ```bash
 export CI=false
 ```
+
+## Credits
+The art for the landing page, Signup page and the Login page was taken from
+this devantart post: [Inn of
+Heroes](https://www.deviantart.com/atomiiii/art/Inn-Of-Heroes-730116642)
