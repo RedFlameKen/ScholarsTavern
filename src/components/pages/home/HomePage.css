@@ -44,15 +44,13 @@
 /*Groups Container*/
 #group_cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, max-content));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 280px));
     justify-content: center;
     gap: 1.5rem;
 }
 
 /*Create Group*/
 .create_card {
-    width: 280px;
-    height: 280px;
     background: #E8CBAE;
     border: 2px solid rgba(76,76,76,0.22);
     border-radius: 28px;
@@ -99,9 +97,14 @@
 }
 
 /*Groups*/
+.create_card,
 .group_card {
-    width: 280px;
-    height: 280px;
+    max-width: 280px;
+    width: 100%;
+    min-height: 280px;
+}
+
+.group_card {
     background: #EED7C1; 
     border: 1px solid #4C4C4C;
     border-radius: 28px;
@@ -117,6 +120,7 @@
     height: 20%;
     display: flex;
     align-items: flex-start;
+    height: fit-content;
 }
 
 .group_card_banner h3 {
