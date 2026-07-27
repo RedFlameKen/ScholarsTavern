@@ -2,9 +2,11 @@
 
 /*Page Layout Wrapper*/
 .requests-page {
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
+    flex-direction: row;
     background-color: #E8CBAE;
+    overflow-y: auto;
 }
 
 .requests-main {
@@ -13,6 +15,8 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 /*Header*/
