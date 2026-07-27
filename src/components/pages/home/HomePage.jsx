@@ -162,7 +162,6 @@ function HomePage() {
             {/* Modal Layout */}
         {isModalOpen && <div className={`modal_overlay ${isModalOpen ? 'show' : ''}`} onClick={closeModal}>
                 <div className="modal_content" onClick={(e) => e.stopPropagation()}>
-                    <button className="close_btn" onClick={closeModal}>&times;</button>
 
                     <header className="modal_header">
                         <h2>Create Group</h2>
@@ -229,6 +228,11 @@ function HomePage() {
                         </div>
 
                         <button type="submit" className="modal_submit_btn">Create</button>
+                            <a 
+                                className="cancel_btn"
+                                onClick={() => closeModal()}>
+                                Cancel
+                            </a>
                     </form>
                 </div>
             </div>}

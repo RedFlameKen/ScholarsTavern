@@ -387,3 +387,15 @@
 #home_page .modal_content .modal_submit_btn:hover {
     background-color: #BE6E43;
 }
+
+.cancel_btn {
+    padding-top: 15px;
+    margin: auto;
+    text-align: center;
+}
+
+.cancel_btn:hover {
+    cursor: pointer;
+    color: #B5673D;
+}
+
