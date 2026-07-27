@@ -16,7 +16,6 @@ function AccountProfilePage() {
     const [pfpVer, setPfpVer] = useState(0)
 
     const userId = useRef(-1);
-    let email = ""
 
     useEffect(() => {
         async function verify() {
@@ -42,7 +41,6 @@ function AccountProfilePage() {
                     }
                     setUsername(name)
                     setAboutText(response.data.bio)
-                    email = response.data.email
                 }
             })
         }
@@ -183,11 +181,11 @@ function AccountProfilePage() {
                             >
                                 Select File
                             </button>
-                            <a 
+                            <p 
                                 className="cancel_btn"
                                 onClick={() => setPfpPromptOpen(false)}>
                                 Cancel
-                            </a>
+                            </p>
                         </div>
                     </div>
                 )}
@@ -207,11 +205,11 @@ function AccountProfilePage() {
                             >
                                 Save
                             </button>
-                            <a 
+                            <p 
                                 className="cancel_btn"
                                 onClick={() => setIsEditModalOpen(false)}>
                                 Cancel
-                            </a>
+                            </p>
                         </div>
                     </div>
                 )}

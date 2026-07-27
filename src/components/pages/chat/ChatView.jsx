@@ -91,7 +91,7 @@ function ChatView({ cur_user_id, channel, chatSocket }) {
 
     function createMessageBubble(chat) {
         return (
-            <div className={`message-box ${chat.sender_id == cur_user_id.current ? "own-message-box" : ""}`}>
+            <div className={`message-box ${chat.sender_id === cur_user_id.current ? "own-message-box" : ""}`}>
                 <img 
                     className="chat-pfp"
                     src={`${buildUrl()}/user/pfp/${chat.sender_id}`} 

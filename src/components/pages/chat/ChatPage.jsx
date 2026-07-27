@@ -103,7 +103,7 @@ function ChatPage() {
 
             }
         });
-    }, [group_id]);
+    }, [group_id, navigate]);
 
     function createChannelItemIcon(type) {
         let icon = type === ChannelType.VOICE ? voiceIcon : tagIcon;
@@ -230,11 +230,11 @@ function ChatPage() {
                         >
                             Kick User
                         </button>
-                        <a 
+                        <p 
                             className="cancel_prompt_btn"
                             onClick={() => setKickSubject(null)}>
                             Cancel
-                        </a>
+                        </p>
                     </div>
                 </div>
             )}

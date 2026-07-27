@@ -228,11 +228,11 @@ function HomePage() {
                         </div>
 
                         <button type="submit" className="modal_submit_btn">Create</button>
-                            <a 
+                            <p 
                                 className="cancel_btn"
                                 onClick={() => closeModal()}>
                                 Cancel
-                            </a>
+                            </p>
                     </form>
                 </div>
             </div>}
