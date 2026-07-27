@@ -171,29 +171,25 @@
 
 /*Modal*/
 .modal_overlay {
-    display: none; 
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    align-content: center;
     background-color: rgba(0, 0, 0, 0.4); 
     z-index: 2000; 
-    justify-content: center;
-    align-items: center;
     font-family: 'Montserrat', sans-serif;
-}
-
-.modal_overlay.show {
-    display: flex;
+    overflow-y: auto;
 }
 
 .modal_content {
+    margin: auto;
+    width: 90%;
+    max-width: 500px;
     background-color: #D6C2A9;
     padding: 3rem;
     border-radius: 40px; 
-    width: 90%;
-    max-width: 500px;
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     display: flex;

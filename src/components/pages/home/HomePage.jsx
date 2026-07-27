@@ -160,7 +160,7 @@ function HomePage() {
             </main>
 
             {/* Modal Layout */}
-            <div className={`modal_overlay ${isModalOpen ? 'show' : ''}`} onClick={closeModal}>
+        {isModalOpen && <div className={`modal_overlay ${isModalOpen ? 'show' : ''}`} onClick={closeModal}>
                 <div className="modal_content" onClick={(e) => e.stopPropagation()}>
                     <button className="close_btn" onClick={closeModal}>&times;</button>
 
@@ -231,7 +231,7 @@ function HomePage() {
                         <button type="submit" className="modal_submit_btn">Create</button>
                     </form>
                 </div>
-            </div>
+            </div>}
         </div>
     );
 }
