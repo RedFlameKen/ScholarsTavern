@@ -149,9 +149,9 @@ function LoginPage() {
                         <a href="/signup" className="footer-link">
                             Register
                         </a>
-                        <a href="/forgot-password" className="footer-link">
-                            Forgot Password?
-                        </a>
+                        {/* <a href="/forgot-password" className="footer-link"> */}
+                        {/*     Forgot Password? */}
+                        {/* </a> */}
                     </div>
                 </form>
             </div>
