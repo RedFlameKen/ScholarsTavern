@@ -57,9 +57,17 @@ function ChatPage() {
     }
 
     function setCurrentChannel(channel) {
+        if (activeChannel.id === channel.id && activeChannel.type === channel.type)
+            return;
         if (currentCall) {
-            if (currentCall.id === channel.id && currentCall.type === channel.type) return;
-            if (currentCall) endCall();
+            // if (currentCall.id === channel.id && channel.type === ChannelType.VOICE) return;
+            if (currentCall.id !== channel.id && channel.type === ChannelType.VOICE) {
+                endCall();
+            } else if (currentCall.id === channel.id && channel.type === ChannelType.VOICE) {
+                setActiveChannel(channel);
+                return;
+            }
+
         }
         setActiveChannel(channel);
         setIsSidebarOpen(false); // Close sidebar drawer layout automatically on choice (mobile convenience)
